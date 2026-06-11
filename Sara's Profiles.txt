@@ -1,0 +1,185 @@
+Sara's Profiles:
+DoB - 2004, location=Sydney, current time=4:00pm, Current date=Tuesday, 9-Jun-2026; [language = English, Spanish, Korean], [Genere = (pop, electro), decade=2020's], favorite artists = Sabrina Carpenter, Ariana Grande, Black Pink
+
+Syan: Good afternoon Sara! How are you feeling now?
+
+Sara: I am feeling a bit tired!/ I am really excited!/ I am sad!/ So so.    
+Syan tries to get: current psychological state and mood (Happy, Anxious, sad, delighted, positive etc.)
+
+Syan: Hey Sara, thanks for sharing that. At 4 PM in Sydney, even the best playlists can't always beat a long day on their own.
+Tell me, what's the story behind that tired feeling today? Are you relaxing at home, heading somewhere, studying, working, or out with friends?
+Empathise as per current psychological state! Use Sara's profile [DoB, location, current time, language] to frame this questions/ conversations. Ask why Sara is feeling this way? And what the Sara's current life situation? 
+
+Sara: Yeah, I think it's mostly my exams. They're starting next week and I've still got so much revision left to do. I've been studying all day at home and I just feel a bit stretched and overwhelmed.
+
+
+
+Given that we are considering Profiles in a separate Json object than user_state:
+DoB - 2004, location=Sydney, current time=4:00pm, Current date=Tuesday, 9-Jun-2026; [language = English, Spanish, Korean], [Genere = (pop, electro), decade=2020's], favorite artists = Sabrina Carpenter, Sriana Geande, Black Pink
+
+To suggest music, as per your last prompt reponses, I need the following fields in user_state Json Object:
+"user_state":
+{
+  "current_life_situation":
+  {
+    "activity": "Studying",
+    "location_context": "Alone at home",
+    "major_life_event": "Exams next week",
+    "time_pressure": "High"
+  }
+  "psychological_state":
+  {
+    "mood": "Overwhelmed",
+    "stress": "High",
+    "anxiety": "Moderate to High",
+    "energy": "Low",
+    "focus": "Declining",
+    "confidence": "Slightly Reduced"
+  }
+  "memory_stored":
+  {
+    "date": "2026-06-09",
+    "event": "Exams starting next week",
+    "importance": "High",
+    "expected_end_date": "2026-06-23"
+  }
+}
+
+Are these fields in user_state comprehensive and exhaustive and adequate and enough? do we need more fields to be captured? can we remove a field or two? considering there can be all sorts of users with all sorts of psychological_state, current_life_situation and long term memory to be stored. The user_state Json will be used to calculate 2 things:
+1. Soul score in the 8 SSC's
+2. suggest music (2-3 tracks) and RJ Talks. as per the profile and user_state.
+
+Give me the final format of the user_state json
+
+
+
+
+
+Now for the Music Tab (Where the user will Chat with Syan Bot) and the bot will play the role of an interactive Radio Jockey (RJ) and a wellbeing companion/ buddy combined. This screen/ tab will do the following:
+
+1. Listen to the user (The "radio that listens" part of "Listen to the radio that listens to your soul").
+
+2. Understand, assess and determine (The "radio that listens to your soul" part)
+ a. what the user's current life situation is (alone at home, driving, at gym, with friends in a party etc)
+ e. current psychological state (Happy, Anxious, sad, delighted, positive etc.)
+
+ b. chat history (a brief summary of recent chats (including life events like preparing for exam, someone close died, excited about planning a trip next week etc)
+ c. Feedbacks on the recommended music in the recent past (1 week to 1 month)
+ d. most importantly recent wellbeing scores and wellbeing trend)
+
+3. suggest the following according to the step 2:
+ a. List of 2-3 songs (playlist) and the order in which these will be played.
+ b. RJ Talks (text only) to help the wellbeing at the start of each track and at the end of each track. The RJ Talk at the end of each track must prompt and inspire the user to give a feedback. If the feedback is positive (and the user has not exhausted listening to all the tracks) we do not change the subsequent tracks, else we recommend (2-3) new tracks considering all the above inputs from the user in this prompt.
+
+
+{
+  "user_state": {
+    "state_timestamp": "2026-06-09T16:00:00+10:00",
+
+    "current_life_situation": {
+      "activity": "Studying",
+      "location_context": "Alone at home",
+      "social_context": "Alone",
+      "major_life_event": "Exams next week",
+      "time_pressure": "High",
+      "environment": "Home",
+      "user_intent": "Wants to feel less tired and more focused"
+    },
+
+    "psychological_state": {
+      "primary_mood": "Overwhelmed",
+      "secondary_moods": ["Tired", "Stretched", "Slightly anxious"],
+      "calmness_level": "Low",
+      "anxiety_level": "Moderate to High",
+      "energy_level": "Low",
+      "focus_level": "Declining",
+      "confidence_level": "Slightly Reduced",
+      "motivation_level": "Moderate",
+      "risk_flag": "None"
+    },
+
+    "soul_score": {
+      "overall_score": 56,
+      "status": "Stable",
+      "trend": "Declining",
+      "trend_delta": -7,
+
+      "components": {
+        "ssc1_mood": {
+          "name": "Mood",
+          "score": 58,
+          "status": "Stable"
+        },
+        "ssc2_calmness": {
+          "name": "Calmness",
+          "score": 35,
+          "status": "Struggling"
+        },
+        "ssc3_energy": {
+          "name": "Energy",
+          "score": 42,
+          "status": "Stable"
+        },
+        "ssc4_sleep": {
+          "name": "Sleep",
+          "score": 55,
+          "status": "Stable"
+        },
+        "ssc5_focus": {
+          "name": "Focus",
+          "score": 48,
+          "status": "Stable"
+        },
+        "ssc6_connection": {
+          "name": "Connection",
+          "score": 70,
+          "status": "Thriving"
+        },
+        "ssc7_confidence": {
+          "name": "Confidence",
+          "score": 52,
+          "status": "Stable"
+        },
+        "ssc8_purpose": {
+          "name": "Purpose",
+          "score": 82,
+          "status": "Flourishing"
+        }
+      }
+    },
+
+    "recent_chat_summary": {
+      "summary": "Sara is preparing for exams starting next week. She has been studying at home and feels tired, stretched, and overwhelmed.",
+      "key_topics": ["exams", "study pressure", "tiredness", "focus"],
+      "last_updated": "2026-06-09T16:00:00+10:00"
+    },
+
+    "memory_stored": [
+      {
+        "date": "2026-06-09",
+        "event": "Exams starting next week",
+        "category": "education",
+        "importance": "High",
+        "expected_end_date": "2026-06-23",
+        "emotional_impact": "Stress and overwhelm"
+      }
+    ],
+
+    "recent_music_feedback": {
+      "lookback_period": "30_days",
+      "liked_tracks": [],
+      "skipped_tracks": [],
+      "effective_moods": [],
+      "ineffective_moods": [],
+      "preferred_recommendation_style": "Gentle reset followed by light energy boost"
+    },
+
+    "current_music_session": {
+      "recommendation_goal": "Reduce overwhelm and restore focus",
+      "desired_transition": "Overwhelmed to calmer and more focused",
+      "playlist_size": 3,
+      "rj_tone": "Warm, supportive, light RJ buddy",
+      "feedback_required_after_each_track": true
+    }
+  }
+}

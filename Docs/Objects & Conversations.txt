@@ -4,7 +4,7 @@ Objects & Conversations:
 {
   "user_identity": 
   {
-    "google_user_id": "113456789012345678901",
+    "google_user_id": "13456789012345678901",
     "email": "sara.kim@gmail.com",
     "email_verified": true,
     "full_name": "Sara Kim",
@@ -59,11 +59,18 @@ Chat Step 1 — Warm opening: e.g.
   "user_current_mood":
   {
     "primary_mood": "Tired",
-    "ssc1_mood_signal": "Medium-Low",
-    "ssc3_energy_signal": "Low"
+    "ssc1_mood_signal": {"value": "Medium-Low", "confidence": "0.7"},
+    "ssc2_calmness_signal": {"value": null, "confidence": null},
+    "ssc3_energy_signal": {"value": "Low", "confidence": "0.8"}
+    "ssc5_focus_signal": {"value": null, "confidence": null},
+
+    "ssc4_sleep_signal": {"value": null, "confidence": null},
+    "ssc6_connection_signal": {"value": null, "confidence": null},
+    "ssc7_confidence_signal": {"value": null, "confidence": null},
+    "ssc8_purpose_signal": {"value": .79, "confidence": .2},
   }
 }
-References: 0=Very Low,  = 
+References: 0=Very Low, Medium Low=1, ... Very Good = 5  
 
 
 1. Current Mood
@@ -82,6 +89,6 @@ Syan tries to get: current psychological state and mood (Happy, Anxious, sad, de
 
 Syan: Hey Sara, thanks for sharing that. At 4 PM in Sydney, even the best playlists can't always beat a long day on their own.
 Tell me, what's the story behind that tired feeling today? Are you relaxing at home, heading somewhere, studying, working, or out with friends?
-Empathise as per current psychological state! Use Sara's profile [DoB, location, current time, language] to frame this questions/ conversations. Ask why Sara is feeling this way? And what the Sara's current life situation? 
+Empathise as per current psychological state! Use Sara's profile [DoB, location, current time, language] to frame this questions/ conversations. Ask why Sara is feeling this way? And what Sara's current life situation is like? 
 
 Sara: Yeah, I think it's mostly my exams. They're starting next week and I've still got so much revision left to do. I've been studying all day at home and I just feel a bit stretched and overwhelmed.
