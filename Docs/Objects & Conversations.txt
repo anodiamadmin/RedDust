@@ -1,0 +1,87 @@
+Objects & Conversations:
+
+1# RedDust User Identity object after Google login:
+{
+  "user_identity": 
+  {
+    "google_user_id": "113456789012345678901",
+    "email": "sara.kim@gmail.com",
+    "email_verified": true,
+    "full_name": "Sara Kim",
+    "first_name": "Sara",
+    "last_name": "Kim",
+    "profile_photo_url": "https://lh3.googleusercontent.com/a/example",
+    "locale_language": "en"
+  }
+}
+
+2# RedDust User Profile object after app onboarding:
+{
+  "user_profile":
+  {
+    "dob": "23-may-2004",
+    "age": 22,
+    "gender_id": "F",
+    "music_languages": [{"lang_id": "ESP", "rank": 1}, {"lang_id": "ENG", "rank": 2}, {"lang_id": "INS", "rank": 3}, {"lang_id": "OTH", "rank": 4}],
+    "favorite_artist": [{"artst_id": "000", "rank": 1}, {"artst_id": "002", "rank": 2}, {"artst_id": "999", "rank": 3}, {"artst_id": "537", "rank": 4}],
+    "favorite_genre": [{"gnre_id": "397", "rank": 1}, {"gnre_id": "127", "rank": 2}, {"gnre_id": "940", "rank": 3}],
+    "favorite_decades": [{"dkd_id": "00", "rank": 1}, {"dkd_id": "04", "rank": 2}, {"dkd_id": "05", "rank": 3}],
+    "other_preference_info": "Percussion based authentic Arabian classical music. Folk songs from across the world. K-Pop."
+  }
+}
+References:
+music_languages.lang_id: ESP=Spanish, ENG=English, INS=Instrumental, OTH=Others, HND=Hindi, BNG=Bengali, URD=Urdu, KOR=Korean, MND=Mandarin, ... etc.
+favorite_artists.artst_id: 000=Ariana Grande, 001=Kishore Kumar, 002=Black Pink, 003=Brian Adams, ... 999=Others
+favorite_genre.gnre_id: 000=Pop, 001=Rock, 002=Reggae, 003=K-Pop, 004=Bollywood, 005=Ghazal, 006=Trans, 007=Jazz, 008=Rabindra Sangeet ... 999=Others
+favorite_decades.dkd_id: 00=Recent, 01=2010s, 02=2000s, 03=90s, 04=80s, 05=70s, 06=60s and older
+
+
+3# RedDust User's current Session Context object:
+{
+  "session_context": {
+    "session_id": "sess_20260609_160000_abc123",
+    "login_timestamp": "2026-06-09T16:00:00+10:00",
+    "timezone": "Australia/Sydney",
+    "current_date": "2026-06-09",
+    "day_of_week": "Tuesday",
+    "time_of_day": "Afternoon",
+    "location": {"source": "device_gps", "city": "Sydney", "state": "NSW", "country": "Australia", "latitude": -33.8688, "longitude": 151.2093, "permission_granted": true},
+    "weather": {"source": "weather_api", "condition": "Cloudy", "temperature_c": 18, "feels_like_c": 16, "temperature_band": "Cool", "is_raining": false},
+    "calendar_context": {"is_weekend": false, "is_public_holiday": false, "holiday_name": null}
+  }
+}
+
+#4 RedDust User's Current Mood object:
+Chat Step 1 — Warm opening: e.g.
+  Syan: Good afternoon Sara 💜 It’s a cool cloudy Tuesday in Sydney — perfect time for a little reset. How are you feeling right now?
+  Expected user answers: A bit tired./ Really excited./ Sad./ So-so./ Stressed./ Pretty good./ Overwhelmed.
+{
+  "user_current_mood":
+  {
+    "primary_mood": "Tired",
+    "ssc1_mood_signal": "Medium-Low",
+    "ssc3_energy_signal": "Low"
+  }
+}
+References: 0=Very Low,  = 
+
+
+1. Current Mood
+2. Current Activity
+4. Major Life Events
+
+
+
+Sara's Profiles:
+DoB - 2004, location=Sydney, current time=4:00pm, Current date=Tuesday, 9-Jun-2026; [language = English, Spanish, Korean], [Genere = (pop, electro), decade=2020's], favorite artists = Sabrina Carpenter, Sriana Geande, Black Pink
+
+Syan: Good afternoon Sara! How are you feeling now?
+
+Sara: I am feeling a bit tired!/ I am really excited!/ I am sad!/ So so.    
+Syan tries to get: current psychological state and mood (Happy, Anxious, sad, delighted, positive etc.)
+
+Syan: Hey Sara, thanks for sharing that. At 4 PM in Sydney, even the best playlists can't always beat a long day on their own.
+Tell me, what's the story behind that tired feeling today? Are you relaxing at home, heading somewhere, studying, working, or out with friends?
+Empathise as per current psychological state! Use Sara's profile [DoB, location, current time, language] to frame this questions/ conversations. Ask why Sara is feeling this way? And what the Sara's current life situation? 
+
+Sara: Yeah, I think it's mostly my exams. They're starting next week and I've still got so much revision left to do. I've been studying all day at home and I just feel a bit stretched and overwhelmed.
