@@ -69,6 +69,7 @@ Chat Step 1 — Warm opening: e.g.
     "ssc7_confidence_signal": {"value": null, "confidence": null},
     "ssc8_purpose_signal": {"value": .79, "confidence": .2},
   }
+  "safety_flag": false,
 }
 References: 0=Very Low, Medium Low=1, ... Very Good = 5  
 
