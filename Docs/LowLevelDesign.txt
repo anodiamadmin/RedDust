@@ -1,5 +1,7 @@
 Objects & Conversations:
 
+A: Deterministic Data
+
 1# RedDust User Identity object after Google login:
 {
   "user_identity": 
@@ -51,32 +53,45 @@ favorite_decades.dkd_id: 00=Recent, 01=2010s, 02=2000s, 03=90s, 04=80s, 05=70s, 
   }
 }
 
-#4 RedDust User's Current Mood object:
-Chat Step 1 — Warm opening: e.g.
-  Syan: Good afternoon Sara 💜 It’s a cool cloudy Tuesday in Sydney — perfect time for a little reset. How are you feeling right now?
+B: Probabilistic Info
+
+#4 RedDust User's Current SSC object:
+Chat Step 1 — Warm opening + mood check-in: e.g.
+  Syan: Hey Sara 💜 How are you feeling right now?
   Expected user answers: A bit tired./ Really excited./ Sad./ So-so./ Stressed./ Pretty good./ Overwhelmed.
 {
-  "user_current_mood":
+  "user_current_ssc":
   {
-    "primary_mood": "Tired",
-    "ssc1_mood_signal": {"value": "Medium-Low", "confidence": "0.7"},
-    "ssc2_calmness_signal": {"value": null, "confidence": null},
-    "ssc3_energy_signal": {"value": "Low", "confidence": "0.8"}
-    "ssc5_focus_signal": {"value": null, "confidence": null},
-
-    "ssc4_sleep_signal": {"value": null, "confidence": null},
-    "ssc6_connection_signal": {"value": null, "confidence": null},
-    "ssc7_confidence_signal": {"value": null, "confidence": null},
-    "ssc8_purpose_signal": {"value": .79, "confidence": .2},
+    "google_user_id": "13456789012345678901",				# ref "user_identity"
+    "session_id": "sess_20260609_160000_abc123",			# ref "session_context"
+    "safety_flag": {"value": false, "unsafe_converstaion": null, "safety_flag_reason": null, "safety_flag_time": "2026-06-09T16:00:00+10:00"},
+    "user_mood": {"self_decription": "A bit tired.", "captured_at": "2026-06-09T16:00:00+10:00"},
+    "user_current_activity": {"self_decription": "A bit tired.", "captured_at": "2026-06-09T16:00:00+10:00"},
+    "life_event": {"self_decription": "Exam approaching!", "captured_at": "2026-06-09T16:00:00+10:00", "impact_severity": .75, "impact_duration_days": 30},
+    "user_feel_signals": {
+      "ssc1": {"name": "Spirit", "value": 0.45, "confidence": 0.65},
+      "ssc2": {"name": "Calmness", "value": null, "confidence": 0},
+      "ssc3": {"name": "Energy", "value": 0.30, "confidence": 0.85},
+      "ssc4": {"name": "Focus", "value": null, "confidence": 0}
+    },
+    "user_life_signals": {
+      "ssc5": {"name": "Motivation", "value": null, "confidence": 0},
+      "ssc6": {"name": "Connection", "value": null, "confidence": 0},
+      "ssc7": {"name": "Self_Belief", "value": null, "confidence": 0},
+      "ssc8": {"name": "Purpose", "value": null, "confidence": 0}
+    }
   }
-  "safety_flag": false,
 }
-References: 0=Very Low, Medium Low=1, ... Very Good = 5  
+References:
+All ssc# (Soul Score Component) values run from 0 to 1, Extremely-Low=0, Medium-Or-Neutral=0.5, Extremely-High=1  
+Confidence of each Soul Score Component runs from 0 to 1, Extremely-Low=0, Medium=0.5, Extremely-High=1  
 
+#4 RedDust User's Current Activity object:
+Chat Step 2 — Warm opening + mood check-in: e.g.
+  Syan: I hear you 💜 What are you doing right now — studying, working, relaxing, travelling, or something else?
 
-1. Current Mood
 2. Current Activity
-4. Major Life Events
+3. Major Life Events
 
 
 
