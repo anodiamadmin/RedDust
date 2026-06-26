@@ -1,0 +1,71 @@
+Primary grouping of users:
+1. Students (18-30 year old)
+2. Young Professionals (22-40 year old)
+3. Professionals: (30-67 year old)
+4. Retirees: (67 plus year old)
+
+Secondary grouping of users (This grouping is overlapped with one or more age based user grouping above):
+1. Families (Parents with young children, working parents, single parents, couples)
+2. Mental Wellbeing Users (Looking for emotional support, mood improvement, resilience: Stress, anxiety, loneliness, emotional fatigue)
+3. Wellness Enthusiasts (Looking for integrated wellbeing support: Meditation, journaling, habit-fitness-wellbeing tracker, workout)
+4. Music Driven Users (Looking for personalized mood for every mood and moment)
+5. Neurodivergent users (Looking for focus, routine, emotional regulation)
+6. Life Transition Users (Guidance, clarity, emotional support, new routines: University entry, graduation, new job, parenthood, divorce-breakup, retirement, relocation)
+
+Users may like to listen to music (or may be podcasts, together referred to as tracks in this document) anytime and any where:
+1. when they are alone
+2. at work
+3. commuting by private or public transport
+4. driving
+5. doing chores
+6. studying
+7. as background music
+8. while hanging out
+9. at private places
+10. with friends or family
+11. resting
+12. out on trips and holidays
+13. during workouts like in the gym
+14. during running
+15. walking
+16. at home
+17. getting ready for going to work/ university/ gym/
+18. before going out
+19. after coming back
+20. during periods of anxiety
+21. during relaxation
+
+
+We had a Design Thinking workshop yesterday, centered around RedDust. Today we discussed the Idea Canvas and validating (quantitively) the prospective users' answers to the research questions around customer pains, customers' functional emotional social jobs, customer gains, problem statement, evaluation, consequences and impact. We are working on quantitative analysis of user research through asking real people and AI personas. Will keep you posted please
+
+
+Detailed Idea of RedDust App's Working - First-Cut Version:
+
+User will click on the app icon. Then they will be able voice chat with Syan Bot. Syan Bot is capable of:
+
+1. For the first time log in, the app will open a form where the user can provide their age and sex, or can just skip. During the first time log-in the user can also allow (or not) access to their "location".
+
+1. Greeting and talking with the user and asking the user questions for measuring and keeping a track-record/ history over time of each user's personal and individual wellbeing in the directions that are exactly aspired by the user themselves or required/ needed for the user as detected by the Syan Bot program.
+
+2. Suggest the user a short number (2, 3 or 4) of links to music or may be podcasts (referred to as tracks in this document) from YouTube or Spotify. Then talk a sentence or two to the user The users may then:
+1. Listen, skip, rewind/ replay or even sing along or karaoke with each of these music or tracks.
+2. The user may react with a love, like, care or angry to a music or track.
+
+
+4. The Syan Bot should be aware of each user's:
+A. Music preferences and taste by chatting for a few times or days or weeks: Genres, Decades, Types, Languages, Music Locale, Favorite Musicians/ Podcasters and Taste. These may change over time and the Syan Bot must do simple and small experiments while suggesting new tracks.
+B. Current activity & mood of the user through the chat. Asking questions about present mood check-ins like What are you doing or how are you feeling now? The user may reply, sitting idle, driving or in a dull mood etc. These may change quickly over time and the Syan Bot must try and understand the exact current activity and mood before suggesting tracks.
+C. Long term life situation of the user: Exams approaching, Just got married, living away from family and feel homesick etc. These may change very slowly over time and still may have an end date. Syan Bot must try and understand the exact long term life situation of the user before suggesting tracks.
+
+2. Recommending music tracks (or podcasts, collectively referenced as tracks in this document), recommendable and appropriate for the betterment/ improvement of user's current mood/ activity, life situations (goals and issues) plus their personal wellbeing in the long and short term.
+
+3. Display the measured wellbeing improvements (and tracking) over time on a dashboard
+4. as well as during voice chat with the user, with Provide proper wellbeing support, explainability of positive/ negative changes and reinforcement .
+
+
+will measure the wellbeing of the user in the top 
+Syan Bot will greet them ask about their situations and issues in life. The user will reply and accordingly the Syan Bot will
+
+
+3. After a track or two, the user will be asked further questions by the bot and the user may respond to those questions.
+According to the above behaviors of the user the bot will assess 
