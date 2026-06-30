@@ -96,7 +96,7 @@ Chat Step 2 — Warm opening + mood check-in: e.g.
 
 
 Sara's Profiles:
-DoB - 2004, location=Sydney, current time=4:00pm, Current date=Tuesday, 9-Jun-2026; [language = English, Spanish, Korean], [Genere = (pop, electro), decade=2020's], favorite artists = Sabrina Carpenter, Sriana Geande, Black Pink
+DoB - 2004, location=Sydney, current time=4:00pm, Current date=Tuesday, 9-Jun-2026; [language = English, Spanish, Korean], [Genere = (pop, electro), decade=2020's], favorite artists = Sabrina Carpenter, Ariana Grande, BlackPink
 
 Syan: Good afternoon Sara! How are you feeling now?
 
