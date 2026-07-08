@@ -10,7 +10,7 @@ A: Deterministic Data
 
 {
 
-&#x20; "user\_identity": 
+&#x20; "user\_identity":
 
 &#x20; {
 
@@ -44,13 +44,9 @@ A: Deterministic Data
 
 &#x20; {
 
-&#x20;   "first\_name": "Sara",	
-
-&#x20;   ~~"dob": "23-may-2004"~~,
+&#x20;   "first\_name": "Sara",
 
 &#x20;   "age": 22,
-
-&#x20;   "gender\_id": "F",
 
 &#x20;   "music\_languages": \[{"lang\_id": "ESP", "rank": 1}, {"lang\_id": "ENG", "rank": 2}, {"lang\_id": "INS", "rank": 3}, {"lang\_id": "OTH", "rank": 4}],
 
@@ -166,9 +162,9 @@ Chat Step 1 — Warm opening + mood check-in: e.g.
 
 References:
 
-All ssc# (Soul Score Component) values run from 0 to 1, Extremely-Low=0, Medium-Or-Neutral=0.5, Extremely-High=1  
+All ssc# (Soul Score Component) values run from 0 to 1, Extremely-Low=0, Medium-Or-Neutral=0.5, Extremely-High=1
 
-Confidence of each Soul Score Component runs from 0 to 1, Extremely-Low=0, Medium=0.5, Extremely-High=1  
+Confidence of each Soul Score Component runs from 0 to 1, Extremely-Low=0, Medium=0.5, Extremely-High=1
 
 
 
@@ -200,7 +196,7 @@ Syan: Good afternoon Sara! How are you feeling now?
 
 
 
-Sara: I am feeling a bit tired!/ I am really excited!/ I am sad!/ So so.    
+Sara: I am feeling a bit tired!/ I am really excited!/ I am sad!/ So so.
 
 Syan tries to get: current psychological state and mood (Happy, Anxious, sad, delighted, positive etc.)
 
@@ -210,11 +206,9 @@ Syan: Hey Sara, thanks for sharing that. At 4 PM in Sydney, even the best playli
 
 Tell me, what's the story behind that tired feeling today? Are you relaxing at home, heading somewhere, studying, working, or out with friends?
 
-Empathise as per current psychological state! Use Sara's profile \[DoB, location, current time, language] to frame this questions/ conversations. Ask why Sara is feeling this way? And what Sara's current life situation is like? 
+Empathise as per current psychological state! Use Sara's profile \[DoB, location, current time, language] to frame this questions/ conversations. Ask why Sara is feeling this way? And what Sara's current life situation is like?
 
 
 
 Sara: Yeah, I think it's mostly my exams. They're starting next week and I've still got so much revision left to do. I've been studying all day at home and I just feel a bit stretched and overwhelmed.
-
-
 
