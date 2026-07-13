@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Page-1" id="YMt1zPgUYCkDTDN7Viyo">
-    <mxGraphModel dx="2413" dy="903" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2163" dy="760" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -145,14 +145,14 @@
         <mxCell id="ImyaV3U5gZ5r2I5UuYbC-58" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;" value="PostgreSQL DB" vertex="1">
           <mxGeometry height="120" width="120" x="680" y="1030" as="geometry" />
         </mxCell>
-        <mxCell id="ImyaV3U5gZ5r2I5UuYbC-61" parent="1" style="shadow=0;dashed=0;html=1;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.veeam.3d.hard_drive;fillColor=#637D8A;gradientColor=#324752;strokeColor=none;" value="" vertex="1">
-          <mxGeometry height="60" width="132.86" x="60" y="985" as="geometry" />
-        </mxCell>
-        <mxCell id="ImyaV3U5gZ5r2I5UuYbC-62" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Persistent storage" vertex="1">
-          <mxGeometry height="30" width="60" x="89" y="1070" as="geometry" />
-        </mxCell>
         <mxCell id="ImyaV3U5gZ5r2I5UuYbC-67" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;p class=&quot;font-claude-response-body break-words whitespace-normal&quot;&gt;&lt;strong&gt;Write path (every turn):&lt;/strong&gt;&lt;/p&gt;&lt;ul class=&quot;[li_&amp;amp;]:mb-0 [li_&amp;amp;]:mt-1 [li_&amp;amp;]:gap-1 [&amp;amp;:not(:last-child)_ul]:pb-1 [&amp;amp;:not(:last-child)_ol]:pb-1 list-disc flex flex-col gap-1 pl-8 mb-3&quot;&gt;&lt;li class=&quot;font-claude-response-body whitespace-normal break-words pl-2&quot;&gt;Save to Postgres (raw message)&lt;/li&gt;&lt;br&gt;&lt;li class=&quot;font-claude-response-body whitespace-normal break-words pl-2&quot;&gt;Append to persistent storage (&lt;code class=&quot;bg-text-200/5 border border-0.5 border-border-300 text-danger-000 whitespace-pre-wrap rounded-[0.4rem] px-1 py-px text-[0.9rem]&quot;&gt;.jsonl&lt;/code&gt; or similar)&lt;/li&gt;&lt;/ul&gt;&lt;p class=&quot;font-claude-response-body break-words whitespace-normal&quot;&gt;&lt;strong&gt;10-day job:&lt;/strong&gt;&lt;/p&gt;&lt;ul class=&quot;[li_&amp;amp;]:mb-0 [li_&amp;amp;]:mt-1 [li_&amp;amp;]:gap-1 [&amp;amp;:not(:last-child)_ul]:pb-1 [&amp;amp;:not(:last-child)_ol]:pb-1 list-disc flex flex-col gap-1 pl-8 mb-3&quot;&gt;&lt;li class=&quot;font-claude-response-body whitespace-normal break-words pl-2&quot;&gt;Summarize raw messages via LLM&lt;/li&gt;&lt;br&gt;&lt;li class=&quot;font-claude-response-body whitespace-normal break-words pl-2&quot;&gt;Delete raw from Postgres, write summary row&lt;/li&gt;&lt;/ul&gt;&lt;p class=&quot;font-claude-response-body break-words whitespace-normal&quot;&gt;&lt;strong&gt;30-day job:&lt;/strong&gt;&lt;/p&gt;&lt;ul class=&quot;[li_&amp;amp;]:mb-0 [li_&amp;amp;]:mt-1 [li_&amp;amp;]:gap-1 [&amp;amp;:not(:last-child)_ul]:pb-1 [&amp;amp;:not(:last-child)_ol]:pb-1 list-disc flex flex-col gap-1 pl-8 mb-3&quot;&gt;&lt;li class=&quot;font-claude-response-body whitespace-normal break-words pl-2&quot;&gt;Delete summary row from Postgres&lt;/li&gt;&lt;br&gt;&lt;li class=&quot;font-claude-response-body whitespace-normal break-words pl-2&quot;&gt;Persistent already has everything, nothing to do&lt;/li&gt;&lt;/ul&gt;&lt;p class=&quot;font-claude-response-body break-words whitespace-normal&quot;&gt;Postgres at any point holds &lt;strong&gt;at most&lt;/strong&gt; raw turns (0–10 days) + one summary blob (10–30 days) per session. Clean and bounded.&lt;/p&gt;" vertex="1">
           <mxGeometry height="320" width="380" x="-380" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="E-w2n1YFQls4EG1u-v4c-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;rotation=-90;" value="Read if chats &amp;gt; 30 days required" vertex="1">
+          <mxGeometry height="30" width="120" x="180" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="E-w2n1YFQls4EG1u-v4c-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="How does the AI know if it needs older context from the HDD?" vertex="1">
+          <mxGeometry height="30" width="220" x="-380" y="930" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
