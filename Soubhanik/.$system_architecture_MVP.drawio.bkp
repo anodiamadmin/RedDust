@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="AI Chat System Architecture" id="arch-v2">
-    <mxGraphModel dx="578" dy="289" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
+    <mxGraphModel dx="1030" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -17,54 +17,46 @@
           <mxGeometry height="30" width="110" x="400" y="20" as="geometry" />
         </mxCell>
         <mxCell id="container_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;dashPattern=8 4;fontSize=13;fontStyle=1;verticalAlign=top;" value="FastAPI Backend" vertex="1">
-          <mxGeometry height="1000" width="275" x="290" y="120" as="geometry" />
+          <mxGeometry height="1024" width="275" x="255" y="120" as="geometry" />
         </mxCell>
         <mxCell id="client" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="&lt;b&gt;Frontend&lt;/b&gt;&lt;br/&gt;Mobile / Web UI" vertex="1">
-          <mxGeometry height="60" width="140" x="50" y="250" as="geometry" />
+          <mxGeometry height="60" width="140" x="100" y="250" as="geometry" />
         </mxCell>
         <mxCell id="transcribe" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;POST /transcribe&lt;/b&gt;&lt;br/&gt;Faster-Whisper" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="150" as="geometry" />
+          <mxGeometry height="50" width="235" x="275" y="150" as="geometry" />
         </mxCell>
         <mxCell id="auth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" value="&lt;b&gt;Auth / token validation&lt;/b&gt;&lt;br/&gt;JWT + session check" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="252" as="geometry" />
+          <mxGeometry height="50" width="235" x="275" y="252" as="geometry" />
         </mxCell>
         <mxCell id="receive" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Receive text + session_id&lt;/b&gt;&lt;br/&gt;validate inputs" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="334" as="geometry" />
+          <mxGeometry height="50" width="235" x="275" y="334" as="geometry" />
         </mxCell>
         <mxCell id="postchat" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;POST /chat&lt;/b&gt;" vertex="1">
-          <mxGeometry height="40" width="155" x="350" y="416" as="geometry" />
+          <mxGeometry height="40" width="155" x="315" y="416" as="geometry" />
         </mxCell>
         <mxCell id="fetch_db" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Fetch history from DB&lt;/b&gt;&lt;br/&gt;asyncpg pool — indexed on session_id, created_at" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="488" as="geometry" />
+          <mxGeometry height="50" width="235" x="275" y="488" as="geometry" />
         </mxCell>
-        <mxCell id="threshold" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="msgs &amp;gt; threshold(N)?" vertex="1">
-          <mxGeometry height="60" width="180" x="337" y="570" as="geometry" />
+        <mxCell id="threshold" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="msgs &gt; threshold?" vertex="1">
+          <mxGeometry height="60" width="180" x="302" y="570" as="geometry" />
         </mxCell>
         <mxCell id="enqueue" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;b&gt;Enqueue summarize job&lt;/b&gt;&lt;br/&gt;Celery / ARQ — async" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="662" as="geometry" />
+          <mxGeometry height="50" width="235" x="275" y="662" as="geometry" />
         </mxCell>
         <mxCell id="build_prompt" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Build prompt&lt;/b&gt;&lt;br/&gt;summary + last N msgs + new msg" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="744" as="geometry" />
+          <mxGeometry height="50" width="235" x="275" y="744" as="geometry" />
         </mxCell>
-        <mxCell id="sse" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" value="&lt;b&gt;Stream LLM response (SSE)&lt;/b&gt;&lt;br/&gt;chunked to client in real-time" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="826" as="geometry" />
+        <mxCell id="sse" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#82b366;" value="&lt;b&gt;Stream LLM response (SSE)&lt;/b&gt;&lt;br/&gt;chunked to client in real-time" vertex="1">
+          <mxGeometry height="50" width="235" x="275" y="826" as="geometry" />
         </mxCell>
         <mxCell id="save_turn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Save turn to DB&lt;/b&gt;&lt;br/&gt;user msg + assistant reply" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="908" as="geometry" />
+          <mxGeometry height="50" width="235" x="275" y="908" as="geometry" />
         </mxCell>
-        <mxCell id="audit_append" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" value="&lt;b&gt;Append to audit log&lt;/b&gt;&lt;br/&gt;timestamped, append-only" vertex="1">
-          <mxGeometry height="50" width="235" x="310" y="990" as="geometry" />
+        <mxCell id="audit_append" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#82b366;" value="&lt;b&gt;Append to audit log&lt;/b&gt;&lt;br/&gt;timestamped, append-only" vertex="1">
+          <mxGeometry height="50" width="235" x="275" y="990" as="geometry" />
         </mxCell>
         <mxCell id="response" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" value="&lt;b&gt;Response to client&lt;/b&gt;" vertex="1">
-          <mxGeometry height="40" width="155" x="350" y="1072" as="geometry" />
-        </mxCell>
-        <mxCell id="AYmi1J8UNvx_MShEfsLz-9" edge="1" parent="1" source="chat_llm" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" target="sse">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="AYmi1J8UNvx_MShEfsLz-11" connectable="0" parent="AYmi1J8UNvx_MShEfsLz-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Response" vertex="1">
-          <mxGeometry relative="1" x="0.3749" y="1" as="geometry">
-            <mxPoint as="offset" />
-          </mxGeometry>
+          <mxGeometry height="40" width="155" x="315" y="1072" as="geometry" />
         </mxCell>
         <mxCell id="chat_llm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;b&gt;Chat inference&lt;/b&gt;&lt;br/&gt;LLM (streaming)" vertex="1">
           <mxGeometry height="60" width="155" x="790" y="210" as="geometry" />
@@ -102,8 +94,8 @@
         <mxCell id="e10" edge="1" parent="1" source="threshold" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" target="build_prompt" value="No">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="580" y="600" />
-              <mxPoint x="580" y="769" />
+              <mxPoint x="545" y="600" />
+              <mxPoint x="545" y="769" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -140,6 +132,9 @@
             </Array>
           </mxGeometry>
         </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="sse" style="edgeStyle=orthogonalEdgeStyle;startArrow=classic;startFill=1;" target="chat_llm" value="LLM call">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="e21" edge="1" parent="1" source="enqueue" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" target="worker" value="dispatch">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -158,31 +153,17 @@
         <mxCell id="e28" edge="1" parent="1" source="audit_append" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" target="audit_table" value="append">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="AYmi1J8UNvx_MShEfsLz-4" edge="1" parent="1" source="kt-rEeNxyX5vL1wA0qCk-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.15;exitY=0.05;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;" target="build_prompt">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="kt-rEeNxyX5vL1wA0qCk-1" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#E1D5E7;" value="&lt;b&gt;PostgreSQL&lt;/b&gt;&lt;br&gt;operational tables&lt;br&gt;idx: session_id, created_at" vertex="1">
           <mxGeometry height="120" width="120" x="890" y="950" as="geometry" />
         </mxCell>
         <mxCell id="kt-rEeNxyX5vL1wA0qCk-2" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Text" vertex="1">
-          <mxGeometry height="30" width="60" x="415" y="304" as="geometry" />
+          <mxGeometry height="30" width="60" x="380" y="304" as="geometry" />
         </mxCell>
         <mxCell id="kt-rEeNxyX5vL1wA0qCk-3" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Text" vertex="1">
-          <mxGeometry height="30" width="60" x="415" y="220" as="geometry" />
+          <mxGeometry height="30" width="60" x="380" y="220" as="geometry" />
         </mxCell>
         <mxCell id="kt-rEeNxyX5vL1wA0qCk-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Voice" vertex="1">
-          <mxGeometry height="30" width="60" x="200" y="250" as="geometry" />
-        </mxCell>
-        <mxCell id="AYmi1J8UNvx_MShEfsLz-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Voice" vertex="1">
-          <mxGeometry height="30" width="60" x="365" y="210" as="geometry" />
-        </mxCell>
-        <mxCell id="AYmi1J8UNvx_MShEfsLz-10" edge="1" parent="1" source="build_prompt" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.329;entryY=1.033;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" target="chat_llm">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="AYmi1J8UNvx_MShEfsLz-12" connectable="0" parent="AYmi1J8UNvx_MShEfsLz-10" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Send query to LLM" vertex="1">
-          <mxGeometry relative="1" x="-0.4553" y="3" as="geometry">
-            <mxPoint x="13" y="1" as="offset" />
-          </mxGeometry>
+          <mxGeometry height="30" width="60" x="340" y="200" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
