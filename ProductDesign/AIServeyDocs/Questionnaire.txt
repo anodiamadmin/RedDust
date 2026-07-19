@@ -1,15 +1,32 @@
-1. Do you often experience stress, loneliness, anxiety, lack of motivation, or emotional overwhelm in everyday life?
-2. When you experience these feelings, do you often have immediate, personalised support available?
-3. Do the currently available digital solutions such as music apps, meditation apps, social media or self-help resources fully meet your wellbeing needs?
-4. Would you value an AI companion that understands your emotions without judging you?
-5. Do you like the idea of an AI that combines conversation with personalised music recommendations instead of offering only one or the other?
-6. Do you believe that music chosen according to your current mood, activity and life situation would improve your wellbeing more than generic playlists?
-7. Would you feel comfortable sharing your mood, activities and important life situations securely within an app, (with no humans ever able to access that information) if it resulted in better personalised recommendations?
-8. Would you find it useful if RedDust remembers your favourite music, life events and wellbeing journey over time?
-9. Would seeing your wellbeing improve over time through an explainable Soul Score motivate you to continue using the app?
-10. Would you like RedDust to adapt its conversations and recommendations as your life changes (for example exams, a new job, becoming a parent or retirement)?
-11. Would you trust recommendations more if RedDust explained why it suggested a particular song or podcast?
-12. If RedDust consistently helped you feel calmer, happier or more motivated, could you imagine using it almost every day?
-13. Do you believe RedDust could become part of your everyday routine, similar to how you currently use your favourite apps like Facebook, Spotify, YouTube or ChatGPT?
-14. If RedDust consistently delivered personalised wellbeing support that genuinely improved your life, would you be willing to pay approximately AUD $10–20 per month?
-15. Overall, do you believe RedDust offers a unique combination of AI companionship, personalised music and wellbeing support that cannot easily be found in a single existing product?
+Do you regularly experience stress, anxiety, loneliness, low motivation, emotional overwhelm, or similar challenges in your everyday life?
+Please explain why you chose this rating. What situations or experiences influenced your answer?
+When you experience these challenges, do you usually have immediate access to the emotional support you need (for example, from friends, family or professionals)?
+Please explain your answer. What kind of support do you currently rely on, and what do you feel is missing?
+Do the digital tools and resources you currently use adequately support your overall wellbeing?
+Please explain your answer. Which tools do you currently use, and what do they do well or poorly?
+Would you value a digital service that understands your personal situation and provides support tailored to your individual needs?
+What would personalised support mean to you? Why did you choose this rating?
+Would you find it more valuable if a single digital service could both interact with you and recommend helpful content based on your situation?
+What kinds of conversations or content would you find most useful?
+Do you believe recommendations that consider your current mood, activity and life situation would be more useful than generic recommendations?
+Can you describe situations where personalised recommendations would be helpful?
+Would you feel comfortable securely sharing information such as your mood, activities or important life events if it clearly resulted in better personalised support?
+What information would you be comfortable sharing, and what information would you prefer to keep private?
+Would you appreciate a digital service that remembers your preferences, important life events and personal journey over time?
+Why would this be valuable—or not valuable—to you?
+Would seeing your wellbeing improve over time through meaningful progress tracking motivate you to build healthier habits?
+What kinds of progress or achievements would you like such a service to track?
+Would you prefer a digital service that adapts its support and recommendations as your life circumstances change (for example, exams, a new job, becoming a parent or retirement)?
+What kinds of life changes should a service understand and adapt to?
+Would you trust recommendations more if the service explained why they were suggested?
+What kind of explanation would make recommendations feel trustworthy and useful?
+If a digital service consistently helped you feel calmer, happier or more motivated, could you imagine using it almost every day?
+What would encourage—or discourage—you from using such a service regularly?
+Do you believe a helpful digital wellbeing service could become part of your everyday routine, similar to the apps you already use regularly?
+What would make a wellbeing service become part of your daily routine?
+If a digital wellbeing service consistently delivered meaningful value and genuinely improved your life, would you consider paying for it?
+What would convince you that such a service is worth paying for? What pricing model (free, freemium, subscription, one-time purchase, etc.) would you prefer?
+Do you believe there is still room for better digital services that support people's emotional wellbeing and everyday life?
+What do you feel is currently missing from today's music, wellbeing or digital support services?
+If you could design your ideal digital companion to support your wellbeing and everyday life, how would it help you?
+Please describe the features, behaviours or experiences that would make it genuinely useful. Don't worry about current technology—imagine your ideal solution.
