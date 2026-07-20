@@ -1,0 +1,55 @@
+All of the previous discussions in this project is about the RedDust (app/ business) idea. We are going to pitch the same in Peter Ferrell's Cup under UNSW Founder's. The current chat is about the user survey for idea validation of RedDust. 
+
+Our broader business idea is long term and short term human wellbeing interventions through AI guided music recommendation and conversation. We must use the following 2 attachments only for guidelines towards this direction. They are not the finalized and crystalized business/ app building idea.
+- IdeaCanvas.txt: RedDust's draft idea canvas converted to plain text.
+- SoulScoreMethodology.docx: This proposes the idea of how RedDust's wellbeing framework may be designed. This may be a way to help our users better understand, improve and sustain their overall wellbeing through personalized conversations, music recommendations, reflection and positive habit formation.
+
+From the numerical analysis and results of this user survey (plus also by providing summary/ quotes from user comments), we wish to prove to the PFC judges and Westpac investors of UNSW Founders that our RedDust idea of long term and short term human wellbeing interventions through AI guided music recommendation and conversation, is relevant and the business is valid, feasible and profitable.
+
+
+Before the survey we must not disclose any of the following to the respondents.
+- We must not disclose: What we propose to build? What problem it solves for the users/ respondents? What our idea, mission and vision are? What functional features the solution will have? We must not assume anything about the user demands about music, AI, conversation, users' psychological or social or mental or wellbeing dimensions and needs.
+- We must not disclose: Who or which customer segment are we building for? What demographics, age group, geography (country, state, city or town), locale, profession, economy, technical awareness/ usage/ bandwidth/ capacity, education etc. are we building for? Which groups will result in more value addition for us or the users. All of that result must be derived from the numeric analysis from the survey.
+- Customer Jobs: What are customers trying to achieve in terms of functional, emotional and social jobs? What is hurting our customers?
+- Customer Pains: What is hurting our customers in terms of Mental, Emotional and Behavioural Wellbeing? If there are some existing solutions and how effective (or not) the existing solutions are.
+- Customer Gains: What do customers really want in terms of Emotional, Lifestyle and Social Gains? What is their Ultimate expectation of Gain?
+- Problem Statement: What is the core problem, its consequences and current workarounds?
+- Problem Evaluation: Why does this problem exist its Causes and Why Existing Solutions Fail?
+- Problem Consequences: What is the impact of the problem on users (our survey respondents) and their employers, universities and society at large?
+- Problem's Emotional Impact: What emotions drive the problem and the corresponding intensities? Why It Matters?
+
+These emotions affect happiness, relationships, career success, physical health and quality of life.
+
+
+
+
+Instead, all of that must come out from the numerical analysis and results of this survey, and must be supported by the summary/ quotes from user comments.
+
+On what broader topics must we conduct the user survey?
+
+Is the problem real?
+
+
+We will ask 50 to 100 independent human respondents from varying, profiles, demographics, geographies, economies, genders, professions and ages to respond to this survey.
+
+We will also create 1000+ AI personas with varying, profiles, demographics, geographies, economies, genders, professions and ages using generative AI and procure responses from those personas using the exact same set of survey questionnaire.
+
+We must analyse statistically if the survey results from human respondents and AI personas match numerically with similar distributions of means and variances across populations groups and subgroups. Also the summary of text responses from both human respondents and AI personas match in meaning and directional indications and cues.
+
+Give me the Survey questionnaire in the following format suitable to convert to a google form:
+
+Survey Title: 2 words to a small sentence.  
+Heading Paragraph: 2-3 short sentences on who we are, why we are doing this survey? What the users may gain in short term and long term from our project.
+
+Section 1: Demographics: ~10 to 12 important text or easily selectable dropdown fields about the respondent's demographic and personal info: e.g. name, age, gender, geography (country, state, city or town), locale/ languages, professional/ social/ personal/ relationship/ educational/ economic status, technical awareness/ usage/ bandwidth/ capacity.
+Must have to be fun to answer and not look tedious or intruding into personal domain. Text or easily selectable dropdown fields (not too long list in dropdown). Most questions must be framed from the perspective of how the users may gain in short term and long term from our project.
+
+Section 2: ~10 to 12 core questions on the following topics. These topics must be subtly placed and the respondents do not need to have the same perspective as us in these topics of problem discovery and solution validation. They must only be concerned about how they may gain in short term and long term from our overall project. ~10 to 12 core questions on the following topics:
+- Customer jobs, pains and gains.
+- 
+Each question must have 2 sub-sections:
+A: How much the respondent agrees or disagrees with a particular point stated in this question? The respondent should be able to select from 1 = Strongly Disagree till 5 = Strongly Agree
+B: One free text sentence of maximum 256 characters from the respondent answering why they Agree or Disagree with the particular point in this question?
+Most questions must be framed from the perspective of how the users may gain in short term and long term from our project.
+
+Note of Thanks:
