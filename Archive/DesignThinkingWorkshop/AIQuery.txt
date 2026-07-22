@@ -1,55 +1,332 @@
-All of the previous discussions in this project is about the RedDust (app/ business) idea. We are going to pitch the same in Peter Ferrell's Cup under UNSW Founder's. The current chat is about the user survey for idea validation of RedDust. 
+We need to fill up UserSurveyDataSet.xlsx spread sheet (UserSurveyDataSet tab) as a survey response dataset for customer discovery of our idea - conversational AI driven, short term and long term wellbeing of individuals by intervention through music recommendation.
 
-Our broader business idea is long term and short term human wellbeing interventions through AI guided music recommendation and conversation. We must use the following 2 attachments only for guidelines towards this direction. They are not the finalized and crystalized business/ app building idea.
-- IdeaCanvas.txt: RedDust's draft idea canvas converted to plain text.
-- SoulScoreMethodology.docx: This proposes the idea of how RedDust's wellbeing framework may be designed. This may be a way to help our users better understand, improve and sustain their overall wellbeing through personalized conversations, music recommendations, reflection and positive habit formation.
+For this, we want to have 1000 different and individual AI personas to provide data for each row of UserSurveyDataSet.xlsx. Each row has the following columns corresponding to the respective survey questions and explanations provided.
 
-From the numerical analysis and results of this user survey (plus also by providing summary/ quotes from user comments), we wish to prove to the PFC judges and Westpac investors of UNSW Founders that our RedDust idea of long term and short term human wellbeing interventions through AI guided music recommendation and conversation, is relevant and the business is valid, feasible and profitable.
+respondent_id: Integer starting from 10001 to 11000, incremented by 1.
+is_ai_persona: always = 1 for AI personas.
+email: sample unique email text for each row.
+name: Short text - human like "Name" for the individual AI persona, appropriate for the demographic/ geographical distribution (mentioned below)
+age_years: Integer, recommended 8–120; usually between 10 to 90 with more AI respondents around the 28-70 years age.
+gender: mostly M or F with a rare few as NB="non binary" or NA="prefer not say".
+country_code: mostly AU (Australia). Some from NZ (New Zealand), SG (Singapore), IN (India), US (USA) or GB (UK). Very few from OTHER.
+country_other_text: When country_code = OTHER then write the full name of the country. Else leave blank. 
+city_town: must be a valid city / town name from the specific country for that respondent.
+life_stage_code: (What best describes the AI Persona respondent's current stage of life) select from high_school_student | university_student | early_career_professional | senior_professional | entrepreneur | parent_caregiver | job_seeker_career_transition | retired | other - must be appropriately distributed according to the age and demographics.
+life_stage_other_text: When country_code = other then write the full description of life stage in a short text. Else leave blank.
+digital_comfort_score: (How comfortable the AI respondent Persona is in using digital apps (mobile/ online)?) 1=Very Uncomfortable; 2=Uncomfortable; 3=Neutral; 4=Comfortable; 5 = Very Comfortable
+music_listening_frequency_score: (How often does the AI respondent Persona listen to music?) 1 = Never to 5 = Always
+
+Following fields (music_channel_...) are about how or through which channel the AI respondent Persona usually listens to music? Survey question: How do you usually listen to music? Each persona can use none or multiple ways to listen to music regularly.
+music_channel_online_apps: 1 if they use online apps such as Spotify or YouTube. Else 0
+music_channel_radio: 1 if they use FM or AM radio. Else 0
+music_channel_television: 1 if they listen through television shows. Else 0
+music_channel_recorded_downloaded: Uses recorded or downloaded music.
+music_channel_live_music: Listens through live music or concerts.
+music_channel_other: Other music listening channel.
+music_channel_other_text: if Other music listening channel = 1 then mention the Other music listening channel in a short text
+
+Following fields (music_context_...) are about when the AI respondent Persona usually listens to music? Survey question: When do you usually listen to music? Each persona can listen to music on none or multiple contexts of time.
+music_context_commuting_driving: 1 if Listens while commuting or driving. else 0.
+music_context_exercising: 1 If Listens while exercising. Else = 0
+music_context_working_studying: Listens while working or studying.
+music_context_alone: Listens while alone.
+music_context_socializing: Listens while socializing
+music_context_chores: Listens while doing chores.
+music_context_other: 1 if another music listening context.
+music_context_other_text: if Other music listening context = 1 then mention the Other music listening context in a short text
+
+Following fields (life_improvement_...) are about the dimension in which the AI respondent Persona wishes to improve their life over the next one year. Survey Question: If you could improve one area of your life over the next year, what would it be? Each persona must pick 1 are or select the other option and mention the same in a short text.
+life_improvement_mental_emotional: 1 if they want life improvement in mental wellbeing & emotional health, else 0
+life_improvement_physical: 1 if they want life improvement in physical health & healthy habits, else 0
+life_improvement_career_financial: Wants life improvement in career, education & financial success 
+life_improvement_relationship_connection: Wants life improvement in relationships & social connections 
+life_improvement_motivation_productivity: Wants life improvement in personal growth, motivation & productivity
+life_improvement_quality_of_life: Wants life improvement in purpose, balance & overall quality of life
+life_improvement_other: Wants life improvement in some other dimension
+life_improvement_other_text: Other life improvement dimension description in a short text.
+	
+financial_situation_score: Survey Question: How would you describe your financial situation? Self-rated financial situation. 1 = Very Difficult to 5 = Very Comfortable
+
+overall_wellbeing_score: Survey Question: How would you describe your overall wellbeing situation? Self-rated overall wellbeing situation. 1 = Very Difficult to 5 = Very Comfortable
+
+music_coping_score: Numeric self rating response by the AI persona on "Does music help you cope during difficult moments?": 1 = Strongly Disagree to 5 = Strongly Agree
+music_coping_reason_text: Brief explanation for above music_coping_score.
+
+music_long_term_wellbeing_score: Numeric self rating response by the AI persona on "Can music positively influence your wellbeing over long term?": 1 = Strongly Disagree to 5 = Strongly Agree
+music_long_term_reason_text: Brief explanation for above music_long_term_wellbeing_score.
+
+situational_music_score: Numeric self rating response by the AI persona on "Do you prefer different kinds of music during different situations?": 1 = Strongly Disagree to 5 = Strongly Agree
+situational_music_reason_text: Brief explanation for above situational_music_score.
+
+conversation_reflection_score: Numeric self rating response by the AI persona on "Can meaningful conversations help you better understand your thoughts and emotions?": 1 = Strongly Disagree to 5 = Strongly Agree
+conversation_reflection_reason_text: Brief explanation for above conversation_reflection_score
+'
+conversation_unmet_need_score: Numeric self rating response by the AI persona on "Do you wish you had someone available whenever you wanted to talk?": 1 = Strongly Disagree to 5 = Strongly Agree
+conversation_unmet_need_reason_text: Brief explanation for above conversation_unmet_need_score
+
+music_conversation_synergy_score: Numeric self rating response by the AI persona on "Do you think that music and conversations together could be more helpful than either one alone?": 1 = Strongly Disagree to 5 = Strongly Agree
+music_conversation_synergy_reason_text: Brief explanation for above music_conversation_synergy_score
+
+ai_conversation_trust_score: Numeric self rating response by the AI persona on "Would you be comfortable having ongoing conversations with a digital assistant that learns about you and while respecting your privacy?": 1 = Strongly Disagree to 5 = Strongly Agree
+ai_conversation_trust_reason_text: Brief explanation for above ai_conversation_trust_score
+
+product_adoption_score: Numeric self rating response by the AI persona on "Would you regularly use a service that personalized music and conversations to support your wellbeing?": 1 = Strongly Disagree to 5 = Strongly Agree
+product_adoption_reason_text: Brief explanation for above product_adoption_score
+
+Following fields (stress_music_...)are about the AI respondent Persona's response to the question: "When life becomes stressful, what role does music play for you?". Each persona can select one or multiple options from the following fields as 1 or 0.
+stress_music_relaxation: 1 if Music helps the respondent relax during stress. else 0
+stress_music_mood_improvement: 1 if Music improves mood during stress. else 0
+stress_music_coping: Music helps the respondent cope during stress.
+stress_music_motivation: Music keeps the respondent motivated during stress.
+stress_music_focus: Music helps the respondent focus during stress.
+stress_music_less_alone: Music makes the respondent feel less alone.
+stress_music_not_used: Respondent does not usually use music during stress; should be exclusive.
+stress_music_other: Selected another role of music during stress.
+stress_music_other_text: If respondent Selected another role of music during stress, describe that in a short text.
+
+Following fields (ai_conversation_...)are about the AI respondent Persona's response to the question: "During difficult times, what would make conversations with an intelligent digital assistant genuinely useful?". Each persona can select one or multiple options from the following fields as 1 or 0.
+ai_conversation_nonjudgmental: 1 if the respondent AI persona (as a human) Values listening by an AI agent without judgment. else 0
+ai_conversation_emotional_understanding: 1 if the respondent AI persona (as a human) Values emotional understanding (AI Agent Understands how they feel). else 0
+ai_conversation_helpful_advice: 1 if the respondent AI persona (as a human) Values helpful advice (AI Agent Gives helpful advice). else 0
+ai_conversation_thoughtful_questions: 1 if the respondent AI persona (as a human) Values that the AI Agent Asks thoughtful questions. else 0
+ai_conversation_encouragement: 1 if the respondent AI persona (as a human) Values encouragement and motivation (AI Agent Encourages and motivates them). else 0
+ai_conversation_clear_reflection: 1 if the respondent AI persona (as a human) Values help with clear reflection (AI Agent Helps them reflect clearly). else 0
+ai_conversation_would_not_use: 1 if the respondent AI persona (as a human) Would not use AI for this purpose; should be exclusive. else 0
+ai_conversation_other: 1 if the respondent AI persona (as a human) Selected another useful AI conversation quality. else 0
+ai_conversation_other_text: Description of - Other useful AI conversation quality.
+
+Following expected_usage_frequency_code field is on the Survey Question: How often would you use a service that combines music and meaningful conversations? Multiple Choice: Only during difficult periods, Occasionally, Few times a week, Weekly, Daily or more
+expected_usage_frequency_code: Accordingly, the AI Respondent persona must select one option from: difficult_periods_only | occasionally | weekly | few_times_week | daily_or_more
+
+Following ideal_interaction_duration_code field is on the Survey Question: How long would your ideal interaction usually last? Multiple Choice: Under 5 minutes, 5–10 minutes, 10–30 minutes, 30–60 minutes, As long as needed
+ideal_interaction_duration_code: Accordingly, the AI Respondent persona must select one option from: under_5_minutes | 5_to_10_minutes | 10_to_30_minutes | 30_to_60_minutes | as_long_as_needed
+
+Following music_personalization_code field is on the Survey Question: How would you like music recommendations to adapt over time? Multiple Choice: Strictly tell my preferences upfront, Keep recommendations mostly unchanged, Start with my preferences - then let it adapt, Let it learn my preferences over time, Unsure
+music_personalization_code: Accordingly, the AI Respondent persona must select one option from: upfront_preferences | mostly_unchanged | hybrid_adaptive | gradual_learning | unsure
+
+Following fields (outcome_...)are about the AI respondent Persona's response to the question: If a digital companion could support your wellbeing over months or years, what would you hope it helps you achieve? Each persona can select none or multiple options from the following fields as 1 or 0.
+outcome_mental_wellbeing: 1 if the AI persona Wants better mental wellbeing. Else 0
+outcome_healthier_habits: 1 if the AI persona Wants healthier habits. Else 0
+outcome_motivation: 1 if the AI persona Wants greater motivation. Else 0
+outcome_focus_productivity: 1 if the AI persona Wants better focus and productivity. Else 0
+outcome_relationships: 1 if the AI persona Wants stronger relationships. Else 0
+outcome_personal_growth: 1 if the AI persona Wants personal growth. Else 0
+outcome_other: 1 if the AI persona Selected another desired outcome. Else 0
+outcome_other_text: Short text description of other desired outcome if the AI persona Selected another desired outcome above.
+
+Following fields (concern_...)are about the AI respondent Persona's response to the question: What concerns may prevent you from using such a service? Each persona can select none or multiple options from the following fields as 1 or 0.
+concern_privacy_security: 1 if the AI persona has Privacy or data security concern. Else 0
+concern_cost: 1 if the AI persona has Cost concern. Else 0
+concern_prefer_people: 1 if the AI persona Prefers talking to people. Else 0
+concern_low_usefulness: 1 if the AI persona Believes the service would not be useful. Else 0
+concern_low_ai_trust: 1 if the AI persona Lack of trust in AI. Else 0
+concern_none: 1 if the AI persona has No concerns. Else 0
+concern_other: 1 if the AI persona has some other concern. Else 0
+concern_other_text: Short text description of the "other concern" if the AI persona has some other concern.
+
+pricing_model_code: Survey Question: Which pricing model would you prefer? Multiple Choice: I would not use it at all, I would only use it if it were completely free, Free trial - then paid subscription, Pay only when I use it, Paid monthly subscription from the start.
+Accordingly, the AI Respondent persona must select one option from: would_not_use | free_only | free_trial_subscription | pay_per_use | monthly_subscription
+
+monthly_want_to_pay_usd_code: Survey Question: If you found this service genuinely valuable, how much would you be willing to pay per month? Multiple Choice: I would not use it at all, I would only use it if it were completely free, Less than US$10 per month, US$10–20 per month, More than US$20.
+Accordingly, the AI Respondent persona must select one option from: would_not_use | free_only | under_10 | 10_to_20 | over_20
+
+additional_comments_text: Survey Question: Anything else you'd like to tell us? AI persona must answer this as a free text
+
+The AI personas should be randomly distributed as per the following demographic/ population distribution:
+- age_years mostly between 10 to 90 with more AI respondents around the 28-70 years age.
+- gender mostly male or female with a rare few from non_binary (or prefer_not_say).
+- country_code mostly AU (Australia). Some from NZ (New Zealand), SG (Singapore), IN (India), US (USA) or GB (UK). Very few from OTHER.
+- city_town must be a valid city / town name from the specific country for that respondent.
+- life_stage_code appropriately distributed according to the age and demographics.
+There can possibly be some exceptions and outliers to this demographic/ population distribution as well, like a very normal survey data.
+
+Now create the 1000 AI personas and generate 1000 respective responses data in 1000 rows from 1000 AI-Personas for all possible fields (columns) in the UserSurveyDataSet.xlsx file. All fields that can be logically filled up, must be filled up and not left blank.
+
+-----------------------------------------------------------------------------
 
 
-Before the survey we must not disclose any of the following to the respondents.
-- We must not disclose: What we propose to build? What problem it solves for the users/ respondents? What our idea, mission and vision are? What functional features the solution will have? We must not assume anything about the user demands about music, AI, conversation, users' psychological or social or mental or wellbeing dimensions and needs.
-- We must not disclose: Who or which customer segment are we building for? What demographics, age group, geography (country, state, city or town), locale, profession, economy, technical awareness/ usage/ bandwidth/ capacity, education etc. are we building for? Which groups will result in more value addition for us or the users. All of that result must be derived from the numeric analysis from the survey.
-- Customer Jobs: What are customers trying to achieve in terms of functional, emotional and social jobs? What is hurting our customers?
-- Customer Pains: What is hurting our customers in terms of Mental, Emotional and Behavioural Wellbeing? If there are some existing solutions and how effective (or not) the existing solutions are.
-- Customer Gains: What do customers really want in terms of Emotional, Lifestyle and Social Gains? What is their Ultimate expectation of Gain?
-- Problem Statement: What is the core problem, its consequences and current workarounds?
-- Problem Evaluation: Why does this problem exist its Causes and Why Existing Solutions Fail?
-- Problem Consequences: What is the impact of the problem on users (our survey respondents) and their employers, universities and society at large?
-- Problem's Emotional Impact: What emotions drive the problem and the corresponding intensities? Why It Matters?
+Following section of the survey deals with the introduction to the demographic, financial, psychological and geographic distribution of the respondent population
 
-These emotions affect happiness, relationships, career success, physical health and quality of life.
+1.	Email *
+
+Section 1 — About You
+1.	Name
+Short text (Optional)
+2.	Age (Years) *
+Short text (Numeric)
+3.	Gender *
+Multiple choice
+•	Male 
+•	Female 
+•	Non-binary 
+•	Prefer not to say 
+4.	Country *
+Dropdown
+•	Australia
+•	New Zealand
+•	Singapore
+•	India
+•	USA
+•	UK
+•	Other: __________
+5.	City / Town *
+Short text
+6.	Which best describes your current stage of life? *
+Dropdown
+•	High School Student
+•	University Student
+•	Early Career Professional
+•	Senior Professional
+•	Entrepreneur
+•	Parent/ Caregiver
+•	Job-Seeker/ Career Transition
+•	Retired
+•	Other: __________
+7.	How comfortable are you using digital apps (mobile/ online)? *
+Scale
+•	1 = Very Uncomfortable
+•	5 = Very Comfortable
+8.	How often do you listen to music? *
+Scale
+•	1 = Never
+•	5 = Always
+9.	How do you usually listen to music? *
+Checkbox
+•	Online apps (Spotify, YouTube etc.)
+•	FM/ AM radio
+•	Television shows
+•	Recorded or downloaded music
+•	Live music or concerts
+•	Other: __________
+10.	When do you usually listen to music? *
+Checkbox
+•	While commuting or driving
+•	While exercising
+•	While working or studying
+•	While alone
+•	While socializing
+•	While doing chores
+•	Other: __________
+11.	If you could improve one area of your life over the next year, what would it be? *
+Multiple choice
+•	Mental wellbeing & emotional health 
+•	Physical health & healthy habits 
+•	Career, education & financial success 
+•	Relationships & social connections 
+•	Personal growth, motivation & productivity 
+•	Purpose, balance & overall quality of life 
+•	Other: __________
+12.	How would you describe your financial situation? *
+Scale
+•	1 = Very Difficult
+•	5 = Very Comfortable
+13.	How would you describe your overall wellbeing situation? *
+Scale
+•	1 = Very Difficult
+•	5 = Very Comfortable
+
+The following fields correspond to the results of these questions: I also attach a few lines of data for these fields.
+
+respondent_id	is_ai_persona	email	name	age_years	gender	country_code	country_other_text	city_town	life_stage_code	life_stage_other_text	digital_comfort_score	music_listening_frequency_score	music_channel_online_apps	music_channel_radio	music_channel_television	music_channel_recorded_downloaded	music_channel_live_music	music_channel_other	music_channel_other_text	music_context_commuting_driving	music_context_exercising	music_context_working_studying	music_context_alone	music_context_socializing	music_context_chores	music_context_other	music_context_other_text	life_improvement_mental_emotional	life_improvement_physical	life_improvement_career_financial	life_improvement_relationship_connection	life_improvement_motivation_productivity	life_improvement_quality_of_life	life_improvement_other	life_improvement_other_text	financial_situation_score	overall_wellbeing_score
+10001	1	william.austin.10001@example.com	William Austin	36	F	OTHER	Malaysia	Kuala Lumpur	entrepreneur		5	5	1	0	0	1	0	0		1	1	1	1	0	1	0		0	0	0	0	0	1	0		3	2
+10002	1	mckenzie.garcia.10002@example.com	Mckenzie Garcia	63	F	AU		Canberra	senior_professional		3	3	1	0	0	0	1	0		1	0	1	0	0	1	0		1	0	0	0	0	0	0		3	2
+10003	1	john.nichols.10003@example.com	John Nichols	58	M	AU		Canberra	job_seeker_career_transition		3	3	1	0	0	1	0	0		1	0	1	1	0	1	0		0	0	0	0	0	1	0		2	4
+10004	1	bianca.lambert.10004@example.com	Bianca Lambert	80	M	AU		Alice Springs	parent_caregiver		3	3	0	0	1	1	0	0		0	0	0	0	1	1	0		0	0	1	0	0	0	0		2	2
+10005	1	quinn.ward.10005@example.com	Quinn Ward	21	M	NZ		Wellington	early_career_professional		5	2	1	0	0	0	1	0		1	1	1	0	0	0	0		0	1	0	0	0	0	0		3	3
+
+Give me the appropriate data visualisations possible for reporting for this section. Give me python code blocks in google colab for this data visualization and reporting
 
 
+----------------------------------------------------------------------------------------------------
 
 
-Instead, all of that must come out from the numerical analysis and results of this survey, and must be supported by the summary/ quotes from user comments.
+Following is the most important section of the survey. It follows the previous introduction to the demographic, financial, psychological and geographic distribution of the respondent population. This deals with the user's/ respondent's perspective on the Idea of our business
 
-On what broader topics must we conduct the user survey?
+Section 2 — Your Perspectives
+1.	Does music help you cope during difficult moments? *
+Part A 
+	1 = Strongly Disagree
+	…
+	5 = Strongly Agree
+Part B
+Could you briefly explain your answer? (Short text. Optional)
+2.	Can music positively influence your wellbeing over long term? *
+Part A 
+	1 = Strongly Disagree
+	…
+	5 = Strongly Agree
+Part B
+Could you briefly explain your answer? (Short text. Optional)
+3.	Do you prefer different kinds of music during different situations? *
+Part A
+	1 = Strongly Disagree
+	…
+	5 = Strongly Agree
+Part B
+Could you briefly explain your answer? (Short text. Optional)
+4.	Can meaningful conversations help you better understand your thoughts and emotions? *
+Part A 
+	1 = Strongly Disagree
+	…
+	5 = Strongly Agree
+Part B
+Could you briefly explain your answer? (Short text. Optional)
+5.	Do you wish you had someone available whenever you wanted to talk? *
+Part A 
+	1 = Strongly Disagree
+	…
+	5 = Strongly Agree
+Part B
+Could you briefly explain your answer? (Short text. Optional)
+6.	Do you think that music and conversations together could be more helpful than either one alone? *
+Part A 
+	1 = Strongly Disagree
+	…
+	5 = Strongly Agree
+Part B
+Could you briefly explain your answer? (Short text. Optional)
+7.	Would you be comfortable having ongoing conversations with a digital assistant that learns about you and while respecting your privacy? *
+Part A 
+	1 = Strongly Disagree
+	…
+	5 = Strongly Agree
+Part B
+Could you briefly explain your answer? (Short text. Optional)
+8.	Would you regularly use a service that personalized music and conversations to support your wellbeing? *
+Part A
+	1 = Strongly Disagree
+	…
+	5 = Strongly Agree
+Part B
+Could you briefly explain your answer? (Short text. Optional) 
 
-Is the problem real?
+The following fields correspond to the results of these questions: these fields follow the  I also attach a few lines of data for these fields.
+
+music_coping_score	music_coping_reason_text	music_long_term_wellbeing_score	music_long_term_reason_text	situational_music_score	situational_music_reason_text	conversation_reflection_score	conversation_reflection_reason_text	conversation_unmet_need_score	conversation_unmet_need_reason_text	music_conversation_synergy_score	music_conversation_synergy_reason_text	ai_conversation_trust_score	ai_conversation_trust_reason_text	product_adoption_score	product_adoption_reason_text
+5	Music is one of my strongest tools for processing emotion and stress.	5	Music has shaped my identity and wellbeing across many years.	5	Different situations call for very different music for me.	4	Being asked the right questions usually improves my self-understanding.	3	There are times when immediate conversation would be helpful.	4	Music could deepen the emotional value of a supportive conversation.	3	I am open to it if controls and privacy settings are clear.	5	I would make it part of my daily wellbeing routine if it works as described.
+4	Music often helps me regulate my mood and feel calmer.	4	Over time, music can reinforce positive habits and emotional regulation.	3	I sometimes adjust tempo or mood to suit the situation.	2	I only gain clarity from conversation in limited situations.	4	I often want someone available when friends or family are busy.	3	It could be useful when the music matches the topic or mood.	2	I need much stronger proof of privacy and reliability first.	3	I would try it and use it occasionally if the experience feels relevant.
+3	Music sometimes settles me, depending on the situation and song.	3	It probably helps indirectly by supporting mood and consistency.	3	My choices vary for a few activities, but not all.	4	Thoughtful conversation often helps me notice patterns and feelings.	4	Having support on demand would reduce feelings of isolation.	4	The right song and the right questions could reinforce each other.	3	My comfort would depend on transparency and the option to delete data.	4	I would likely use it several times a week if it feels genuinely personal.
+4	Music often helps me regulate my mood and feel calmer.	4	Regular music use can support resilience, routines, and emotional balance.	3	I sometimes adjust tempo or mood to suit the situation.	4	Thoughtful conversation often helps me notice patterns and feelings.	4	Having support on demand would reduce feelings of isolation.	4	The right song and the right questions could reinforce each other.	2	I might try it briefly, but I would keep conversations superficial.	5	A personalised companion that understands my mood and music could be highly valuable.
+
+Give me the appropriate data visualisations possible for reporting for this section. Give me python code blocks in google colab for this data visualization and reporting
+-------------------------------------------------------------------------------------
 
 
-We will ask 50 to 100 independent human respondents from varying, profiles, demographics, geographies, economies, genders, professions and ages to respond to this survey.
+Consider the attached UserPerspectives.xlsx spread sheet. The following columns answer the respective Survey Questions given below.
 
-We will also create 1000+ AI personas with varying, profiles, demographics, geographies, economies, genders, professions and ages using generative AI and procure responses from those personas using the exact same set of survey questionnaire.
-
-We must analyse statistically if the survey results from human respondents and AI personas match numerically with similar distributions of means and variances across populations groups and subgroups. Also the summary of text responses from both human respondents and AI personas match in meaning and directional indications and cues.
-
-Give me the Survey questionnaire in the following format suitable to convert to a google form:
-
-Survey Title: 2 words to a small sentence.  
-Heading Paragraph: 2-3 short sentences on who we are, why we are doing this survey? What the users may gain in short term and long term from our project.
-
-Section 1: Demographics: ~10 to 12 important text or easily selectable dropdown fields about the respondent's demographic and personal info: e.g. name, age, gender, geography (country, state, city or town), locale/ languages, professional/ social/ personal/ relationship/ educational/ economic status, technical awareness/ usage/ bandwidth/ capacity.
-Must have to be fun to answer and not look tedious or intruding into personal domain. Text or easily selectable dropdown fields (not too long list in dropdown). Most questions must be framed from the perspective of how the users may gain in short term and long term from our project.
-
-Section 2: ~10 to 12 core questions on the following topics. These topics must be subtly placed and the respondents do not need to have the same perspective as us in these topics of problem discovery and solution validation. They must only be concerned about how they may gain in short term and long term from our overall project. ~10 to 12 core questions on the following topics:
-- Customer jobs, pains and gains.
-- 
-Each question must have 2 sub-sections:
-A: How much the respondent agrees or disagrees with a particular point stated in this question? The respondent should be able to select from 1 = Strongly Disagree till 5 = Strongly Agree
-B: One free text sentence of maximum 256 characters from the respondent answering why they Agree or Disagree with the particular point in this question?
-Most questions must be framed from the perspective of how the users may gain in short term and long term from our project.
-
-Note of Thanks:
+Column AM - music_coping_score: Survey Question - 
+Column AN - music_coping_reason_text: Survey Question - Could you briefly explain your last answer? 
+Column AO - music_long_term_wellbeing_score: Survey Question -
+Column AP - music_long_term_reason_text: Survey Question - Could you briefly explain your last answer? 
+Column AQ - situational_music_score: Survey Question -
+Column AR - situational_music_reason_text: Survey Question - Could you briefly explain your last answer?
+Column AS - conversation_reflection_score: Survey Question -
+Column AT - conversation_reflection_reason_text: Survey Question - Could you briefly explain your last answer?
+Column AU - conversation_unmet_need_score: Survey Question -
+Column AV - conversation_unmet_need_reason_text: Survey Question - Could you briefly explain your last answer?
+Column AW - music_conversation_synergy_score: Survey Question -
+Column AX - music_conversation_synergy_reason_text: Survey Question - Could you briefly explain your last answer?
+Column AY - ai_conversation_trust_score: Survey Question -
+Column AZ - ai_conversation_trust_reason_text: Survey Question - Could you briefly explain your last answer?
+Column BA - product_adoption_score: Survey Question -
+Column BB - product_adoption_reason_text: Survey Question - Could you briefly explain your last answer?
