@@ -149,6 +149,327 @@
           "scope_in": "drawio architecture diagram only; all 5 review issues from architecture_review doc",
           "scope_out": "implementation code, DB migrations, API code",
           "why": null
+        },
+        {
+          "id": "e14ed3df-c439-46e2-9fc8-bf133d266bd9",
+          "project_id": "4dd6fb32-28f2-471f-b94a-2217dbfb7d3e",
+          "lane": "Development",
+          "title": "FastAPI Chat Endpoint — Gemini LLM with Followup Question",
+          "purpose": "Build a POST /chat endpoint that takes user text, sends it to Gemini, and returns a response with a followup question",
+          "status": "completed",
+          "session_id": null,
+          "learnings": [
+            "gemini-1.5-flash is deprecated; use gemini-2.0-flash with google-genai SDK"
+          ],
+          "steps": [
+            {
+              "id": "9a5efae6-af62-4abb-921c-eb7d341f1b96",
+              "plan_id": "e14ed3df-c439-46e2-9fc8-bf133d266bd9",
+              "order": 1,
+              "content": "Fill requirements.txt with fastapi, uvicorn, google-generativeai, pydantic-settings, python-dotenv",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "Add pinned or unpinned deps for the Gemini SDK and FastAPI stack",
+              "verification": "File exists and contains all 5 deps — pip install -r requirements.txt should succeed",
+              "outcome": "requirements.txt written with fastapi, uvicorn[standard], google-generativeai, pydantic-settings, python-dotenv",
+              "files_touched": [
+                "backend/requirements.txt"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "b0d573db-6862-4a50-8d66-2ddbd272b207",
+              "plan_id": "e14ed3df-c439-46e2-9fc8-bf133d266bd9",
+              "order": 2,
+              "content": "Define config.py: load GEMINI_API_KEY from .env via pydantic-settings",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "BaseSettings class with GEMINI_API_KEY; single settings singleton",
+              "verification": "from app.config import settings; assert settings.GEMINI_API_KEY != \"\"",
+              "outcome": "config.py written with BaseSettings loading GEMINI_API_KEY from .env",
+              "files_touched": [
+                "backend/app/config.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "2a839e99-d00a-4bd0-8f58-9e53667654dd",
+              "plan_id": "e14ed3df-c439-46e2-9fc8-bf133d266bd9",
+              "order": 3,
+              "content": "Define schemas.py: ChatRequest (user_message: str) and ChatResponse (reply: str, followup_question: str)",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "Two Pydantic BaseModel classes",
+              "verification": "from app.schemas import ChatRequest, ChatResponse; ChatResponse(reply=\"hi\", followup_question=\"what?\")",
+              "outcome": "schemas.py written with ChatRequest and ChatResponse Pydantic models",
+              "files_touched": [
+                "backend/app/schemas.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "323d1bcd-d9a6-4f1c-9919-9717ecfa4831",
+              "plan_id": "e14ed3df-c439-46e2-9fc8-bf133d266bd9",
+              "order": 4,
+              "content": "Write prompts.py: system prompt that instructs Gemini to always end with one followup question",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "A SYSTEM_PROMPT constant string",
+              "verification": "from app.services.prompts import SYSTEM_PROMPT; assert \"followup_question\" in SYSTEM_PROMPT",
+              "outcome": "prompts.py written with SYSTEM_PROMPT instructing Gemini to return raw JSON only",
+              "files_touched": [
+                "backend/app/services/prompts.py"
+              ],
+              "severity": "med"
+            },
+            {
+              "id": "fb9f3092-cc7f-4baa-b061-58a40872ff5e",
+              "plan_id": "e14ed3df-c439-46e2-9fc8-bf133d266bd9",
+              "order": 5,
+              "content": "Write llm.py: async function call_gemini(user_message) -> ChatResponse using google-generativeai SDK",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "Configure genai with API key, call model.generate_content, parse reply and followup from response text",
+              "verification": "Run uvicorn, POST a message, confirm ChatResponse fields are populated",
+              "outcome": "llm.py written with async call_gemini, code fence stripping, and JSON parsing into ChatResponse",
+              "files_touched": [
+                "backend/app/services/llm.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "d11db515-6571-424b-8c79-2b79aea58c80",
+              "plan_id": "e14ed3df-c439-46e2-9fc8-bf133d266bd9",
+              "order": 6,
+              "content": "Write chat.py router: POST /chat accepts ChatRequest, calls call_gemini, returns ChatResponse",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "APIRouter with single POST route",
+              "verification": "POST /api/chat with valid user_message returns 200 with reply and followup_question fields",
+              "outcome": "chat.py written with POST /chat route, JSONDecodeError and generic exception handling",
+              "files_touched": [
+                "backend/app/api/chat.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "53a5c12d-234d-4856-afa2-857a242c6f45",
+              "plan_id": "e14ed3df-c439-46e2-9fc8-bf133d266bd9",
+              "order": 7,
+              "content": "Register chat router in main.py and verify endpoint works with uvicorn",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "app.include_router(chat_router, prefix='/api')",
+              "verification": "Run: uvicorn app.main:app --reload from backend/; POST http://localhost:8000/api/chat with {\\\"user_message\\\": \\\"hello\\\"} should return {\\\"reply\\\": \\\"...\\\", \\\"followup_question\\\": \\\"...\\\"}",
+              "outcome": "main.py updated to import chat_router and mount it at /api prefix",
+              "files_touched": [
+                "backend/app/main.py"
+              ],
+              "severity": "high"
+            }
+          ],
+          "created_at": "2026-07-30T06:04:05.652Z",
+          "last_updated": "2026-07-30T06:31:33.313Z",
+          "parent_plan_id": null,
+          "parent_step_id": null,
+          "plan_type": "rigorous-coding",
+          "user_plan_request": "Simple FastAPI endpoint where user sends text, Gemini LLM responds with a followup question",
+          "conscience_rules": "1. Do the right thing.\n2. Do not hurry to just complete the step by taking shortcuts.\n3. When stuck, you can ask the user.\n4. If you have spent a lot of time on something, stop and ask the user.\n5. Always do one by one, even without gates.\n6. Once a step is done right: write the outcome to the planning tool, update status, and if approval is required wait for user approval.\n7. Deliver all changes into the main branch working tree, UNCOMMITTED; never commit, push, or stash — only the user commits.",
+          "approved_deviations": [],
+          "plan_approval": "draft",
+          "scope_in": "schemas.py, config.py, api/chat.py, services/llm.py, services/prompts.py, main.py router registration, requirements.txt",
+          "scope_out": "auth, DB persistence, streaming, frontend",
+          "why": null
+        },
+        {
+          "id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+          "project_id": "4dd6fb32-28f2-471f-b94a-2217dbfb7d3e",
+          "lane": "Development",
+          "title": "Session, History & Auth",
+          "purpose": "Add session persistence, multi-turn conversation history, and auth to the RedDust backend",
+          "status": "wip",
+          "session_id": null,
+          "learnings": [],
+          "steps": [
+            {
+              "id": "1c25b757-fdc0-4c16-b1c7-4828f75e0085",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 1,
+              "content": "Create services/session_store.py: in-memory dict mapping session_id (UUID) to list of messages [{role, text}]",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "Module-level dict; functions: get_history(session_id), append_message(session_id, role, text), clear_session(session_id)",
+              "verification": "from app.services.session_store import append_message, get_history; append_message('x','user','hi'); assert get_history('x') == [{'role':'user','text':'hi'}]",
+              "outcome": "session_store.py created with in-memory defaultdict and get_history, append_message, clear_session functions",
+              "files_touched": [
+                "backend/app/services/session_store.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "c7998fd2-a3ff-40b1-b9ab-0b54f6fb76ba",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 2,
+              "content": "Update schemas.py: ChatRequest adds optional session_id (str | None); ChatResponse adds session_id (str)",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "session_id: str | None = None on request; session_id: str on response",
+              "verification": "from app.schemas import ChatRequest, ChatResponse; ChatRequest(user_message='hi') — session_id defaults None; ChatResponse(reply='x', followup_question='y', session_id='abc')",
+              "outcome": "schemas.py updated: ChatRequest has optional session_id, ChatResponse has required session_id",
+              "files_touched": [
+                "backend/app/schemas.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "a59f8941-d2d1-43e9-9b8a-5c1111d11630",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 3,
+              "content": "Update llm.py: call_gemini accepts session_id, loads history from session_store, builds contents list for Gemini, appends user+assistant messages after response",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "contents = [{role: user/model, parts: [text]}...] built from history + current message; store both turns after success",
+              "verification": "Two sequential POSTs with same session_id; second call should have context of first",
+              "outcome": "llm.py updated: call_gemini accepts session_id, builds contents from history, appends both turns to session_store after response",
+              "files_touched": [
+                "backend/app/services/llm.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "4be0816b-7ff0-46f0-8b61-50709e4390bf",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 4,
+              "content": "Update chat.py: generate session_id if not provided, pass it to call_gemini, return it in ChatResponse",
+              "status": "done",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "session_id = request.session_id or str(uuid4())",
+              "verification": "POST /api/chat without session_id returns a new session_id; POST with same session_id reuses it",
+              "outcome": "chat.py updated: generates uuid session_id if not provided, passes it to call_gemini, returns it in response",
+              "files_touched": [
+                "backend/app/api/chat.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "8778bce9-4630-4870-9ba6-8b642ccb223b",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 5,
+              "content": "Manual test: two sequential curl calls with the same session_id — second response should reference first message context",
+              "status": "pending",
+              "context": null,
+              "human_approval_status": "pending",
+              "human_approval_comments": null,
+              "implementation_outline": "Send 'my name is Alex', then 'what is my name?' with same session_id",
+              "verification": null,
+              "outcome": null,
+              "files_touched": [],
+              "severity": "high"
+            },
+            {
+              "id": "0b91c667-9d14-48bb-89b0-3cc378b7b6f9",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 6,
+              "content": "Add JWT auth: install python-jose[cryptography], passlib[bcrypt]; create services/auth.py with create_token and verify_token",
+              "status": "pending",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "HS256 JWT; SECRET_KEY loaded from .env via config.py",
+              "verification": null,
+              "outcome": null,
+              "files_touched": [
+                "backend/app/services/auth.py",
+                "backend/app/config.py",
+                "backend/requirements.txt"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "db608783-e1bb-4bbe-8889-eb415b0030d8",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 7,
+              "content": "Add POST /auth/register and POST /auth/login endpoints with in-memory user store; login returns JWT",
+              "status": "pending",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "users dict {username: hashed_password}; register hashes and stores; login verifies and returns token",
+              "verification": null,
+              "outcome": null,
+              "files_touched": [
+                "backend/app/api/auth.py",
+                "backend/app/main.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "81a28662-49d8-48fb-8b52-573e272bdba8",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 8,
+              "content": "Protect POST /chat with JWT: extract Bearer token, verify, attach username to request; session_id scoped per user",
+              "status": "pending",
+              "context": null,
+              "human_approval_status": "not_required",
+              "human_approval_comments": null,
+              "implementation_outline": "FastAPI Depends(verify_token) on the chat route",
+              "verification": null,
+              "outcome": null,
+              "files_touched": [
+                "backend/app/api/chat.py"
+              ],
+              "severity": "high"
+            },
+            {
+              "id": "252d3169-5010-4186-aade-656931701d6c",
+              "plan_id": "b73f1044-89e8-49dd-b83f-92c5954ccbac",
+              "order": 9,
+              "content": "Manual test: register → login → get token → POST /chat with Bearer token; verify auth works and history persists",
+              "status": "pending",
+              "context": null,
+              "human_approval_status": "pending",
+              "human_approval_comments": null,
+              "implementation_outline": "Full curl flow end to end",
+              "verification": null,
+              "outcome": null,
+              "files_touched": [],
+              "severity": "high"
+            }
+          ],
+          "created_at": "2026-07-30T06:54:30.216Z",
+          "last_updated": "2026-07-30T06:55:56.335Z",
+          "parent_plan_id": null,
+          "parent_step_id": null,
+          "plan_type": "rigorous-coding",
+          "user_plan_request": "Add session persistence, conversation history (multi-turn Gemini context), and auth to the backend in that order",
+          "conscience_rules": "1. Do the right thing.\n2. Do not hurry to just complete the step by taking shortcuts.\n3. When stuck, ask the user.\n4. If stuck too long, stop and ask.\n5. Always do one step at a time.\n6. Once a step is done right: write outcome, update status, wait for approval if required.\n7. Deliver all changes uncommitted; never commit, push, or stash.",
+          "approved_deviations": [],
+          "plan_approval": "draft",
+          "scope_in": "session management, in-memory store, conversation history passed to Gemini, JWT auth, user model",
+          "scope_out": "frontend, DB (use in-memory for now), email/OAuth login flows",
+          "why": null
         }
       ]
     }
