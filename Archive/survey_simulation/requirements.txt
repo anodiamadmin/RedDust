@@ -1,5 +1,0 @@
-groq>=0.13.0
-pandas==2.2.2
-plotly==5.22.0
-python-dotenv==1.2.2
-seaborn==0.13.2
