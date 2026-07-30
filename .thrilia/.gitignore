@@ -1,0 +1,2 @@
+# Atomic-write temp files (crash-orphaned half-writes) — never commit these.
+*.tmp
