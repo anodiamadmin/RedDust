@@ -37,7 +37,7 @@ async def call_gemini(user_message: str, session_id: str) -> ChatResponse:
     )
 
     response = await client.aio.models.generate_content(
-        model="gemini-2.0-flash",
+        model=settings.GEMINI_MODEL,
         contents=contents,
         config=types.GenerateContentConfig(
             system_instruction=SYSTEM_PROMPT,
