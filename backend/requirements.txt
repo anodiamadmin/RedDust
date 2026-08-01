@@ -1,5 +1,5 @@
 fastapi
 uvicorn[standard]
-google-genai
+google-generativeai
 pydantic-settings
 python-dotenv

@@ -1,0 +1,165 @@
+Attached SurveyQuestions.docx is the final set of survey questionnaire that we have circulated as a google form to survey human respondents.
+SurveyResults.xlsx is the result collected from the first few human respondents. Below is the link between the fields in the SurveyResults.xlsx's result columns/ fields verses the questions in the SurveyQuestions.docx's survey questionnaire
+
+Section 1 — Music, Conversations & Wellbeing
+email - Email Address - Mandatory
+
+Section 2 — About You
+name - Name - Optional
+age_years - Age (Years) - Mandatory, Numeric
+gender - Gender - Mandatory, Multiple choice: Male | Female | Non-binary | Prefer not to say 
+country - Country - Mandatory, Dropdown: Australia | New Zealand | Singapore | India | USA | UK | Other (mention)
+city_town - City/ Town - Mandatory, must be a valid city from the specified country
+life_stage - Which best describes your current stage of life? - Mandatory, Dropdown: High School Student | University Student | Early Career Professional | Senior Professional | Entrepreneur | Parent/ Caregiver | Job-Seeker/ Career Transition | Retired | Other (mention)
+digital_comfort - How comfortable are you using digital apps (mobile/ online)? - Mandatory, Likert Scale: 1 = Very Uncomfortable to 5 = Very Comfortable
+music_listening_frequency - How often do you listen to music? - Mandatory, Likert Scale: 1 = Never to 5 = Always
+music_listening_channel - How do you usually listen to music? - Mandatory, Checkbox: Online apps (Spotify, YouTube etc.) | FM/ AM radio | Television shows | Recorded or downloaded music | Live music or concerts | Other (mention)
+music_listening_context - When do you usually listen to music? - Mandatory, Checkbox: While commuting or driving | While exercising | While working or studying | While alone | While socializing | While doing chores | Other (mention)
+life_improvement_area - If you could improve one area of your life over the next year, what would it be? - Mandatory, Multiple choice: Mental wellbeing & emotional health | Physical health & healthy habits | Career, education & financial success | Relationships & social connections | Personal growth, motivation & productivity | Purpose, balance & overall quality of life | Other (mention)
+financial_situation_score - How would you describe your financial situation? - Mandatory, Likert Scale: 1 = Very Difficult to 5 = Very Comfortable
+overall_wellbeing_score - How would you describe your overall wellbeing situation? - Mandatory, Likert Scale: 1 = Very Difficult to 5 = Very Comfortable
+
+Section 3 — Your Perspectives: though the textual reasoning questions are optional for humans, As AI personas, answer all of these questions.
+music_coping_score - Q1. Does music help you cope during difficult moments? - Mandatory, Likert Scale: 1 = Strongly Disagree to 5 = Strongly Disagree
+music_coping_reason_text - Can you tell us about a time when music made a positive difference? - Optional
+music_long_term_wellbeing_score - Q2. Can music positively influence your wellbeing over long term? - Mandatory, Likert Scale: 1 = Strongly Disagree to 5 = Strongly Disagree
+music_long_term_reason_text - What makes you feel this way? Feel free to share any personal experiences. - Optional
+situational_music_score - Q3. Do you prefer different kinds of music during different situations? - Mandatory, Likert Scale: 1 = Strongly Disagree to 5 = Strongly Disagree
+situational_music_reason_text - What kind of music do you choose in different situations? - Optional
+conversation_reflection_score - Q4. Can meaningful conversations help you better understand your thoughts and emotions? - Mandatory, Likert Scale: 1 = Strongly Disagree to 5 = Strongly Disagree
+conversation_reflection_reason_text - What makes a conversation truly meaningful for you? - Optional
+conversation_unmet_need_score - Q5. Do you wish you had someone available whenever you wanted to talk? - Mandatory, Likert Scale: 1 = Strongly Disagree to 5 = Strongly Disagree
+conversation_unmet_need_reason_text - What kind of support or conversation would you find most valuable in those moments? - Optional
+music_conversation_synergy_score - Q6. Do you think that music and conversations together could be more helpful than either one alone? - Mandatory, Likert Scale: 1 = Strongly Disagree to 5 = Strongly Disagree
+music_conversation_synergy_reason_text - Why do you think this combination (would or wouldn't) work well for you? - Optional
+ai_conversation_trust_score - Q7. Would you be comfortable having ongoing conversations with a digital assistant that learns about you and while respecting your privacy? - Mandatory, Likert Scale: 1 = Strongly Disagree to 5 = Strongly Disagree
+ai_conversation_trust_reason_text - What would help you feel comfortable (or uncomfortable) using something like this? - Optional
+product_adoption_score - Q8. Would you regularly use a service that personalized music and conversations to support your wellbeing? - Mandatory, Likert Scale: 1 = Strongly Disagree to 5 = Strongly Disagree
+product_adoption_reason_text - What would make a service like this genuinely worth coming back to? - Optional
+
+Section 4 — Your Preferences: though these are optional for humans, As AI personas, answer all of these questions.
+stress_music_role - When life becomes stressful, what role does music play for you? - Optional, Checkbox: Helps me relax | Improves my mood | Helps me cope | Keeps me motivated | Helps me focus | Makes me feel less alone | I don't usually use music | Other (mention)
+ai_conversation_reason - During difficult times, what would make conversations with an intelligent digital assistant genuinely useful? - Optional, Checkbox: Listens without judging | Understands how I feel | Gives helpful advice | Asks thoughtful questions |	Encourages and motivates me | Helps me reflect clearly | I wouldn't use an AI for this | Other (mention)
+expected_usage_frequency - How often would you use a service that combines music and meaningful conversations? - Optional, Multiple Choice: Only during difficult periods | Occasionally | Few times a week | Weekly | Daily or more
+ideal_interaction_duration - How long would your ideal interaction usually last? - Optional, Multiple Choice: Under 5 minutes | 5–10 minutes | 10–30 minutes | 30–60 minutes | As long as needed
+music_personalization_type - How would you like music recommendations to adapt over time? - Optional, Multiple Choice: Strictly tell my preferences upfront | Keep recommendations mostly unchanged | Unsure | Start with my preferences, then let it adapt | Let it learn my preferences over time
+wellbeing_outcome_expectation - If a digital companion could support your wellbeing over months or years, what would you hope it helps you achieve? - Optional, Checkbox: Better mental wellbeing | Healthier habits | Greater motivation | Better focus and productivity | Stronger relationships | Personal growth | Other (mention)
+concern	- What concerns may prevent you from using such a service? - Optional, Checkbox: Privacy and data security | Cost | I prefer talking to people | It wouldn't be useful for me | Lack of trust in AI | None | Other (mention)
+pricing_model_preference - Which pricing model would you prefer? - Optional, Multiple Choice: I would not use it at all | I would only use it if it were completely free | Free trial, then paid subscription | Pay only when I use it | Paid monthly subscription from the start 
+monthly_want_to_pay_usd - If you found this service genuinely valuable, how much would you be willing to pay per month? - Optional, Multiple Choice: I would not use it at all | I would only use it if it were completely free | Less than US$10 per month | US$10–20 per month | More than US$20
+additional_comments - Anything else you'd like to tell us? - Optional
+
+We need to fill up SurveyResults.xlsx spread sheet (SurveyResults tab) as a survey response dataset for customer discovery of our idea - conversational AI driven, short term and long term wellbeing of individuals by intervention through music recommendation.
+
+For this, we want to have 1000 different and individual AI personas to provide data for each row of SurveyResults.xlsx. Each row has the following above columns/ fields corresponding to the respective survey questions and explanations provided.
+
+The AI personas should be randomly distributed as per the following demographic/ population distribution:
+- age_years mostly between 10 to 90 with more AI respondents around the 28-70 years age.
+- gender mostly male or female with a rare few from non_binary (or prefer_not_say).
+- country_code mostly AU (Australia). Some from NZ (New Zealand), SG (Singapore), IN (India), US (USA) or GB (UK). Very few from OTHER.
+- city_town must be a valid city / town name from the specific country for that respondent.
+- life_stage_code appropriately distributed according to the age and demographics.
+There can possibly be some exceptions and outliers to this demographic/ population distribution as well, like a very normal survey data.
+
+Now create the 1000 AI personas and generate 1000 respective responses data in 1000 rows from 1000 AI-Personas for all possible fields (columns) in the UserSurveyDataSet.xlsx file. All fields that can be logically filled up, must be filled up and not left blank.
+
+------------------------------------------------------------------------------
+
+The above output from the previous prompt is SurveyResults_1000_AI_Personas.xlsx. It is renamed as SurveyResults.xlsx and stored in my google drive at location "My Drive/Colab Notebooks/RedDust_IdeaValidation".
+
+Give me code for a colab notebook '00HumanAiValidation.ipynb' in the same folder. The code should be block by block Python code for the following:
+- Read the SurveyResults.xlsx
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different ages
+- data visualization of the distribution of all respondents (humans + AI personas) for different ages
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different genders
+- data visualization of the distribution of all respondents (humans + AI personas) for different genders
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different countries
+- data visualization of the distribution of all respondents (humans + AI personas) for different countries
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different cities/ towns
+- data visualization of the distribution of all respondents (humans + AI personas) for different cities/ towns
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different life_stage (current stage of life)
+- data visualization of the distribution of all respondents (humans + AI personas) for different life_stage (current stage of life)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different digital_comfort (comfortable are you using digital apps)
+- data visualization of the distribution of all respondents (humans + AI personas) for different digital_comfort (comfortable are you using digital apps)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different music_listening_frequency (How often do you listen to music?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different music_listening_frequency (How often do you listen to music?)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different music_listening_channel (How do you usually listen to music?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different music_listening_channel (How do you usually listen to music?)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different music_listening_context (When do you usually listen to music?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different music_listening_context (When do you usually listen to music?)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different life_improvement_area (If you could improve one area of your life over the next year, what would it be?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different life_improvement_area (If you could improve one area of your life over the next year, what would it be?)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different financial_situation_score (How would you describe your financial situation?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different financial_situation_score (How would you describe your financial situation?)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different overall_wellbeing_score (How would you describe your overall wellbeing situation?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different overall_wellbeing_score (How would you describe your overall wellbeing situation?)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different music_coping_score (Does music help you cope during difficult moments?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different music_coping_score (Does music help you cope during difficult moments?)
+- using an LLM summarize all the comments (Agreeing or Disagreeing) from the music_coping_reason_text column within 1000 characters
+- using an LLM pick up top 3 most notable, striking and supportive comments by human respondents only from the music_coping_reason_text column
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different music_long_term_wellbeing_score (Can music positively influence your wellbeing over long term?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different music_long_term_wellbeing_score (Can music positively influence your wellbeing over long term?)
+- using an LLM summarize all the comments (Agreeing or Disagreeing) from the music_long_term_reason_text column within 1000 characters
+- using an LLM pick up top 3 most notable, striking and supportive comments by human respondents only from the music_long_term_reason_text column
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different situational_music_score (Do you prefer different kinds of music during different situations?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different situational_music_score (Do you prefer different kinds of music during different situations?)
+- using an LLM summarize all the comments (Agreeing or Disagreeing) from the situational_music_reason_text column within 1000 characters
+- using an LLM pick up top 3 most notable, striking and supportive comments by human respondents only from the situational_music_reason_text column
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different conversation_reflection_score (Can meaningful conversations help you better understand your thoughts and emotions?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different conversation_reflection_score (Can meaningful conversations help you better understand your thoughts and emotions?)
+- using an LLM summarize all the comments (Agreeing or Disagreeing) from the conversation_reflection_reason_text column within 1000 characters
+- using an LLM pick up top 3 most notable, striking and supportive comments by human respondents only from the conversation_reflection_reason_text column
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different conversation_unmet_need_score (Do you wish you had someone available whenever you wanted to talk?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different conversation_unmet_need_score (Do you wish you had someone available whenever you wanted to talk?)
+- using an LLM summarize all the comments (Agreeing or Disagreeing) from the conversation_unmet_need_reason_text column within 1000 characters
+- using an LLM pick up top 3 most notable, striking and supportive comments by human respondents only from the conversation_unmet_need_reason_text column
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different music_conversation_synergy_score (Do you think that music and conversations together could be more helpful than either one alone?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different music_conversation_synergy_score (Do you think that music and conversations together could be more helpful than either one alone?)
+- using an LLM summarize all the comments (Agreeing or Disagreeing) from the music_conversation_synergy_reason_text column within 1000 characters
+- using an LLM pick up top 3 most notable, striking and supportive comments by human respondents only from the music_conversation_synergy_reason_text column
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different ai_conversation_trust_score (Would you be comfortable having ongoing conversations with a digital assistant that learns about you and while respecting your privacy?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different ai_conversation_trust_score (Would you be comfortable having ongoing conversations with a digital assistant that learns about you and while respecting your privacy?)
+- using an LLM summarize all the comments (Agreeing or Disagreeing) from the ai_conversation_trust_reason_text column within 1000 characters
+- using an LLM pick up top 3 most notable, striking and supportive comments by human respondents only from the ai_conversation_trust_reason_text column
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different product_adoption_score (Would you regularly use a service that personalized music and conversations to support your wellbeing?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different product_adoption_score (Would you regularly use a service that personalized music and conversations to support your wellbeing?)
+- using an LLM summarize all the comments (Agreeing or Disagreeing) from the product_adoption_reason_text column within 1000 characters
+- using an LLM pick up top 3 most notable, striking and supportive comments by human respondents only from the product_adoption_reason_text column
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different stress_music_role (When life becomes stressful, what role does music play for you?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different stress_music_role (When life becomes stressful, what role does music play for you?)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different ai_conversation_reason (During difficult times, what would make conversations with an intelligent digital assistant genuinely useful?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different ai_conversation_reason (During difficult times, what would make conversations with an intelligent digital assistant genuinely useful?)
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different expected_usage_frequency
+- data visualization of the distribution of all respondents (humans + AI personas) for different expected_usage_frequency
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different ideal_interaction_duration
+- data visualization of the distribution of all respondents (humans + AI personas) for different ideal_interaction_duration
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different music_personalization_type
+- data visualization of the distribution of all respondents (humans + AI personas) for different music_personalization_type
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different wellbeing_outcome_expectation
+- data visualization of the distribution of all respondents (humans + AI personas) for different wellbeing_outcome_expectation
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different concern (What concerns may prevent you from using such a service?)
+- data visualization of the distribution of all respondents (humans + AI personas) for different concern (What concerns may prevent you from using such a service?)
+
+
+- data visualization of the distribution of percentage of humans Vs percentage of AI personas for different pricing_model_preference
+- data visualization of the distribution of all respondents (humans + AI personas) for different pricing_model_preference
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
