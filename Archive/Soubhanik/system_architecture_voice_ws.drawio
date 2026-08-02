@@ -1,0 +1,363 @@
+<mxfile host="Electron">
+  <diagram name="Voice WS Architecture" id="voice-ws-arch">
+    <mxGraphModel dx="2721" dy="756" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="leg_rn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=11;" value="React Native (client)" vertex="1">
+          <mxGeometry height="30" width="160" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_ws" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="FastAPI / WS layer" vertex="1">
+          <mxGeometry height="30" width="150" x="190" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_llm" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="Gemini (LLM)" vertex="1">
+          <mxGeometry height="30" width="130" x="350" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_interrupt" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" value="Barge-in / interrupt path" vertex="1">
+          <mxGeometry height="30" width="180" x="490" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_tts" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="expo-speech (TTS)" vertex="1">
+          <mxGeometry height="30" width="150" x="680" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontStyle=1;fontSize=16;" value="RedDust — Voice WebSocket Architecture" vertex="1">
+          <mxGeometry height="35" width="700" x="300" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="client_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;dashPattern=8 4;fontSize=13;fontStyle=1;verticalAlign=top;" value="React Native Client" vertex="1">
+          <mxGeometry height="1050" width="320" x="-70" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="vad" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" value="&lt;b&gt;useVAD hook&lt;/b&gt;&lt;br/&gt;RMS energy polling (100ms)&lt;br/&gt;SPEECH_THRESHOLD = -40 dB&lt;br/&gt;300 ms onset / 600 ms offset" vertex="1">
+          <mxGeometry height="70" width="280" x="-50" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="recorder" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" value="&lt;b&gt;useAudioRecorder hook&lt;/b&gt;&lt;br/&gt;expo-av Recording (M4A)&lt;br/&gt;→ base64 via expo-file-system&lt;br/&gt;max 30 s safety cap" vertex="1">
+          <mxGeometry height="70" width="280" x="-50" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="ws_hook" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;useVoiceSocket hook&lt;/b&gt;&lt;br/&gt;WebSocket to /api/ws/voice&lt;br/&gt;auto-reconnect (exp. backoff, 3×)&lt;br/&gt;sendAudio(b64) | sendInterrupt()" vertex="1">
+          <mxGeometry height="70" width="280" x="-50" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="RA3yRYkJ8AtWMfi_bnru-4" edge="1" parent="1" source="voice_screen" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="chunk_queue">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="voice_screen" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" value="&lt;b&gt;VoiceScreen&lt;/b&gt;&lt;br/&gt;idle | listening | speaking states&lt;br/&gt;pulse animation during listen&lt;br/&gt;transcription + chunk text display" vertex="1">
+          <mxGeometry height="70" width="280" x="-50" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="chunk_queue" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;Chunk playback queue&lt;/b&gt;&lt;br/&gt;array of pending sentence chunks&lt;br/&gt;drained via onDone callbacks" vertex="1">
+          <mxGeometry height="60" width="280" x="-50" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="expo_speech" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;expo-speech&lt;/b&gt;&lt;br/&gt;Speech.speak(chunk)&lt;br/&gt;onDone → dequeue next chunk&lt;br/&gt;Speech.stop() on barge-in" vertex="1">
+          <mxGeometry height="70" width="280" x="-50" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="bargein_check" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="VAD detects speech&lt;br/&gt;while speaking?" vertex="1">
+          <mxGeometry height="70" width="200" x="-10" y="920" as="geometry" />
+        </mxCell>
+        <mxCell id="backend_bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#6c8ebf;dashed=1;dashPattern=8 4;fontSize=13;fontStyle=1;verticalAlign=top;" value="FastAPI Backend" vertex="1">
+          <mxGeometry height="1090" width="560" x="430" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ws_endpoint" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;WS /api/ws/voice&lt;/b&gt;&lt;br/&gt;ConnectionManager&lt;br/&gt;accepts connections, routes messages&lt;br/&gt;by type: &#39;audio&#39; | &#39;interrupt&#39;" vertex="1">
+          <mxGeometry height="70" width="280" x="530" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="abort_event" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;b&gt;asyncio.Event (abort)&lt;/b&gt;&lt;br/&gt;per-connection&lt;br/&gt;reset on new audio msg&lt;br/&gt;set() on interrupt msg" vertex="1">
+          <mxGeometry height="70" width="230" x="750" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="audio_decode" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Decode base64 audio&lt;/b&gt;&lt;br/&gt;detect MIME type (M4A)&lt;br/&gt;spawn asyncio task" vertex="1">
+          <mxGeometry height="60" width="230" x="555" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="voice_service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;call_gemini_voice_stream()&lt;/b&gt;&lt;br/&gt;audio_bytes + mime_type&lt;br/&gt;+ session_id + abort_event&lt;br/&gt;loads history, builds inline_data part" vertex="1">
+          <mxGeometry height="70" width="280" x="440" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="gemini" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="&lt;b&gt;Gemini generate_content_stream&lt;/b&gt;&lt;br/&gt;(free-tier, not Live API)&lt;br/&gt;client.aio.models.generate_content_stream&lt;br/&gt;returns async iterator of chunks" vertex="1">
+          <mxGeometry height="80" width="230" x="750" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="abort_check" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="abort_event&lt;br/&gt;.is_set()?" vertex="1">
+          <mxGeometry height="70" width="170" x="470" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="sentence_split" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Sentence boundary splitter&lt;/b&gt;&lt;br/&gt;buffer chunks&lt;br/&gt;split on &#39;. &#39; &#39;! &#39; &#39;? &#39;&lt;br/&gt;emit complete sentences" vertex="1">
+          <mxGeometry height="70" width="280" x="450" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="ws_send_chunk" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;WS send&lt;/b&gt; {type: &#39;chunk&#39;, text: &#39;...&#39;}&lt;br/&gt;one message per sentence" vertex="1">
+          <mxGeometry height="50" width="280" x="450" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="ws_send_done" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;WS send&lt;/b&gt; {type: &#39;done&#39;}&lt;br/&gt;stream complete" vertex="1">
+          <mxGeometry height="50" width="280" x="450" y="990" as="geometry" />
+        </mxCell>
+        <mxCell id="RA3yRYkJ8AtWMfi_bnru-2" edge="1" parent="1" source="ws_send_interrupted" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;dashed=1;strokeColor=#B85450;curved=0;" target="voice_screen">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="299.96" y="722.52" />
+              <mxPoint x="299.96" y="565.04" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RA3yRYkJ8AtWMfi_bnru-3" connectable="0" parent="RA3yRYkJ8AtWMfi_bnru-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="type:&#39;interrupted-&amp;gt;&lt;br&gt;clear chunk queue" vertex="1">
+          <mxGeometry relative="1" x="0.103" as="geometry">
+            <mxPoint x="127" y="-3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ws_send_interrupted" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;b&gt;WS send&lt;/b&gt; {type: &#39;interrupted&#39;}&lt;br/&gt;abort confirmed to client" vertex="1">
+          <mxGeometry height="50" width="230" x="720" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="session_store" parent="1" style="shape=datastore;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="&lt;b&gt;session_store&lt;/b&gt;&lt;br/&gt;in-memory (Redis later)&lt;br/&gt;conversation history" vertex="1">
+          <mxGeometry height="80" width="160" x="710" y="1080" as="geometry" />
+        </mxCell>
+        <mxCell id="save_turn_v" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Save turn to session_store&lt;/b&gt;&lt;br/&gt;transcription + assistant reply" vertex="1">
+          <mxGeometry height="60" width="155" x="460" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="e_vad_rec" edge="1" parent="1" source="vad" style="edgeStyle=orthogonalEdgeStyle;" target="recorder">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_vad_rec" connectable="0" parent="e_vad_rec" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="onSpeechEnd" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_rec_ws" edge="1" parent="1" source="recorder" style="edgeStyle=orthogonalEdgeStyle;" target="ws_hook">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_rec_ws" connectable="0" parent="e_rec_ws" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="sendAudio(base64)" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_ws_to_backend" edge="1" parent="1" source="ws_hook" style="strokeColor=#6c8ebf;strokeWidth=2;entryX=0;entryY=0.75;entryDx=0;entryDy=0;exitX=0.983;exitY=0.047;exitDx=0;exitDy=0;exitPerimeter=0;" target="ws_endpoint">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_ws_audio" connectable="0" parent="e_ws_to_backend" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="{type:&#39;audio&#39;, data:b64}" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_wse_abort" edge="1" parent="1" source="ws_endpoint" style="dashed=1;entryX=0;entryY=0;entryDx=0;entryDy=0;" target="abort_event">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_reset" connectable="0" parent="e_wse_abort" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="reset()" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_wse_decode" edge="1" parent="1" source="ws_endpoint" style="edgeStyle=orthogonalEdgeStyle;" target="audio_decode">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_decode_svc" edge="1" parent="1" source="audio_decode" style="edgeStyle=orthogonalEdgeStyle;" target="voice_service">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_svc_gemini" edge="1" parent="1" source="voice_service" style="edgeStyle=orthogonalEdgeStyle;fillColor=#fff2cc;strokeColor=#d6b656;" target="gemini">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_gemini" connectable="0" parent="e_svc_gemini" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="audio inline_data + history" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint x="50" y="-13" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_gemini_check" edge="1" parent="1" source="gemini" style="exitX=0.025;exitY=0.924;entryX=1;entryY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="abort_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_each_chunk" connectable="0" parent="e_gemini_check" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="each chunk" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_check_no" edge="1" parent="1" source="abort_check" style="edgeStyle=orthogonalEdgeStyle;" target="sentence_split">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_no" connectable="0" parent="e_check_no" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="No" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_check_yes" edge="1" parent="1" source="abort_check" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;dashed=1;" target="ws_send_interrupted">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_yes" connectable="0" parent="e_check_yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="Yes → break" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_split_chunk" edge="1" parent="1" source="sentence_split" style="edgeStyle=orthogonalEdgeStyle;" target="ws_send_chunk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_sent" connectable="0" parent="e_split_chunk" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="complete sentence" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_chunk_to_client" edge="1" parent="1" source="ws_send_chunk" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;strokeWidth=2;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="ws_hook">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_done_to_client" edge="1" parent="1" source="ws_send_done" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;dashed=1;exitX=0;exitY=0.5;entryX=0.85;entryY=1.039;exitDx=0;exitDy=0;entryDx=0;entryDy=0;entryPerimeter=0;" target="voice_screen">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="390.05" y="1015.05" />
+              <mxPoint x="390.05" y="630" />
+              <mxPoint x="193" y="630" />
+              <mxPoint x="193" y="602.74" />
+            </Array>
+            <mxPoint x="450" y="1079.96" as="sourcePoint" />
+            <mxPoint x="230" y="499.96" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_done_back" connectable="0" parent="e_done_to_client" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="{type:&#39;done&#39;}" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint x="-10" y="199" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_split_done" edge="1" parent="1" source="sentence_split" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" target="ws_send_done">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_stream_end" connectable="0" parent="e_split_done" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="stream end" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint y="-28" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_ws_to_queue" edge="1" parent="1" source="ws_hook" style="edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="voice_screen">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_enqueue" connectable="0" parent="e_ws_to_queue" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="enqueue chunk" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint y="123" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="RA3yRYkJ8AtWMfi_bnru-5" connectable="0" parent="e_ws_to_queue" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="onMessage c&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;hunk&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0982" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_queue_speech" edge="1" parent="1" source="chunk_queue" style="edgeStyle=orthogonalEdgeStyle;" target="expo_speech">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_speak" connectable="0" parent="e_queue_speech" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="Speech.speak(chunk)" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_speech_loop" edge="1" parent="1" source="expo_speech" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" target="chunk_queue">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="815" />
+              <mxPoint x="260" y="690" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_ondone" connectable="0" parent="e_speech_loop" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="onDone → dequeue next" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_vad_bargein" edge="1" parent="1" source="vad" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#b85450;" target="bargein_check">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-139.95" y="175.05" />
+              <mxPoint x="-139.95" y="955.05" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_vad_monitor" connectable="0" parent="e_vad_bargein" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="when isSpeaking=true&lt;div&gt;monitors during playback&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_speech_bi" edge="1" parent="1" source="expo_speech" style="edgeStyle=orthogonalEdgeStyle;" target="bargein_check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_isspeaking" connectable="0" parent="e_speech_bi" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="isSpeaking=true" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="bargein_action" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;b&gt;Barge-in action&lt;/b&gt;&lt;br/&gt;1. Speech.stop()&lt;br/&gt;2. sendInterrupt() over WS&lt;br/&gt;3. startRecording()" vertex="1">
+          <mxGeometry height="80" width="240" x="-30" y="1060" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bi_yes" edge="1" parent="1" source="bargein_check" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;" target="bargein_action">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_bi_yes" connectable="0" parent="e_bi_yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="Yes" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_bi_no" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;" value="No → continue" vertex="1">
+          <mxGeometry height="30" width="100" x="145" y="960" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bi_interrupt" edge="1" parent="1" source="bargein_action" style="strokeColor=#b85450;strokeWidth=2;dashed=1;edgeStyle=orthogonalEdgeStyle;exitX=0.129;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" target="ws_hook">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1.04" y="620" />
+              <mxPoint x="1.04" y="620" />
+            </Array>
+            <mxPoint x="240" y="1100" as="sourcePoint" />
+            <mxPoint x="-20" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_interrupt" connectable="0" parent="e_bi_interrupt" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="{type:&#39;interrupt&#39;}" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint x="-1" y="215" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_interrupt_abort" edge="1" parent="1" source="ws_endpoint" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;strokeWidth=2;dashed=1;exitX=1;exitY=0.5;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="abort_event">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_abort_set" connectable="0" parent="e_interrupt_abort" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="set() on interrupt" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_svc_read_history" edge="1" parent="1" source="voice_service" style="edgeStyle=orthogonalEdgeStyle;dashed=1;exitX=0.968;exitY=0.004;exitDx=0;exitDy=0;exitPerimeter=0;" target="session_store">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030.05" y="510.32" />
+              <mxPoint x="1030.05" y="1120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_read_hist" connectable="0" parent="e_svc_read_history" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="read history" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint x="-180" y="-173" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_save_hist" edge="1" parent="1" source="save_turn_v" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" target="session_store">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lbl_write_hist" connectable="0" parent="e_save_hist" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="write turn" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_done_save" edge="1" parent="1" source="ws_send_done" style="edgeStyle=orthogonalEdgeStyle;" target="save_turn_v">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RA3yRYkJ8AtWMfi_bnru-1" connectable="0" parent="e_done_save" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="after stream complete" vertex="1">
+          <mxGeometry relative="1" x="-0.3418" y="-3" as="geometry">
+            <mxPoint x="34" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_bi_restart" edge="1" parent="1" source="bargein_action" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;dashed=1;exitX=0.349;exitY=0.037;entryX=0;entryY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" target="recorder">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="53.78" y="1050" />
+              <mxPoint x="-209.93" y="1050" />
+              <mxPoint x="-209.93" y="305.04" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl_restart_rec" connectable="0" parent="e_bi_restart" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;" value="startRecording()" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note_ws" parent="1" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;rounded=1;fontSize=10;whiteSpace=wrap;" value="&lt;b&gt;WS message protocol&lt;/b&gt;&lt;br/&gt;Client→Server: {type:&#39;audio&#39;, data:b64, session_id?}&lt;br/&gt;Client→Server: {type:&#39;interrupt&#39;}&lt;br/&gt;Server→Client: {type:&#39;chunk&#39;, text:&#39;...&#39;}&lt;br/&gt;Server→Client: {type:&#39;done&#39;}&lt;br/&gt;Server→Client: {type:&#39;interrupted&#39;}" vertex="1">
+          <mxGeometry height="110" width="320" x="1070" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="note_bargein" parent="1" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;rounded=1;fontSize=10;whiteSpace=wrap;" value="&lt;b&gt;Barge-in flow&lt;/b&gt;&lt;br/&gt;1. VAD detects onset during TTS playback&lt;br/&gt;2. Speech.stop() cuts current audio&lt;br/&gt;3. {type:&#39;interrupt&#39;} sent over WS&lt;br/&gt;4. Backend abort_event.set() breaks Gemini loop&lt;br/&gt;5. Backend sends {type:&#39;interrupted&#39;}&lt;br/&gt;6. Client clears chunk queue, starts new recording" vertex="1">
+          <mxGeometry height="110" width="320" x="1070" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="note_vad" parent="1" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=middle;rounded=1;fontSize=10;whiteSpace=wrap;" value="&lt;b&gt;VAD thresholds&lt;/b&gt;&lt;br/&gt;Onset: RMS &gt; -40 dB for 300 ms&lt;br/&gt;Offset: RMS &lt; -40 dB for 600 ms&lt;br/&gt;Polling: every 100 ms via getStatusAsync&lt;br/&gt;Active in both idle AND speaking states" vertex="1">
+          <mxGeometry height="90" width="320" x="1070" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="note_scope" parent="1" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;rounded=1;fontSize=10;whiteSpace=wrap;" value="&lt;b&gt;Out of scope (this diagram)&lt;/b&gt;&lt;br/&gt;• Gemini Live API&lt;br/&gt;• Cloud TTS (uses on-device expo-speech)&lt;br/&gt;• Persistent DB (session_store is in-memory)&lt;br/&gt;• Auth / push notifications&lt;br/&gt;• Word-level timestamps" vertex="1">
+          <mxGeometry height="100" width="320" x="1070" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="RA3yRYkJ8AtWMfi_bnru-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="{type:&#39;chunk}" vertex="1">
+          <mxGeometry height="30" width="60" x="320" y="510" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
