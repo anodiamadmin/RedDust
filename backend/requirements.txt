@@ -7,3 +7,4 @@ asyncpg
 pgvector
 openpyxl
 python-docx
+httpx

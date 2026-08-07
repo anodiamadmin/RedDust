@@ -10,6 +10,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # Required: must be set in .env — app will not start without this
     GEMINI_API_KEY: str
+    YOUTUBE_API_KEY: str
 
     # Optional: defaults to gemini-3.5-flash-lite if not set in .env
     GEMINI_MODEL: str = "gemini-3.5-flash-lite"
