@@ -53,3 +53,8 @@ External integrations: LLM provider, STT/TTS, music streaming APIs, avatar/anima
 
 -------
 
+I now want to build this:
+
+React Native microphone → WebRTC → RedDust Gateway → echo → WebRTC → React Native speaker.
+
+Where do I start? Give me step by step direction.

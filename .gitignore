@@ -43,3 +43,8 @@ logs/
 
 # System
 .thrilia
+
+# Microsoft Office temporary files
+~$*.docx
+~$*.pptx
+~$*.xlsx
