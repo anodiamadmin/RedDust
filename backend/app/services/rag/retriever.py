@@ -4,7 +4,7 @@
 # similar chunks in the anodiam_knowledge table using pgvector cosine similarity.
 #
 # Why cosine similarity?
-#   - text-embedding-004 / gemini-embedding-001 vectors are not unit-normalized,
+#   - gemini-embedding-001 vectors are not unit-normalized,
 #     so cosine similarity (1 - cosine_distance) is more reliable than dot product.
 #   - pgvector operator <=> = cosine distance (lower = more similar)
 #
@@ -17,7 +17,7 @@ import asyncpg
 import google.genai as genai
 
 from app.config import settings
-from app.services.rag.embedder import EMBEDDING_BATCH_SIZE
+from app.services.rag.embedder import EMBEDDING_DIM, normalize_embedding
 
 # Number of candidate chunks to retrieve before reranking
 # Retrieve more than needed (e.g. 20) so the reranker has room to work
@@ -36,14 +36,15 @@ async def embed_query(query: str) -> list[float]:
     response = await client.aio.models.embed_content(
         model="gemini-embedding-001",
         contents=[query],
+        config=types.EmbedContentConfig(output_dimensionality=EMBEDDING_DIM),
     )
-    return response.embeddings[0].values
+    return normalize_embedding(response.embeddings[0].values)
 
 
 async def retrieve(
     pool: asyncpg.Pool,
     query: str,
-    domain: str,
+    domain: str | None = None,
     top_k: int = DEFAULT_TOP_K,
 ) -> list[dict]:
     """

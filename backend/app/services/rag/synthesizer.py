@@ -1,7 +1,7 @@
 # services/rag/synthesizer.py — RAG response synthesis
 #
 # Responsibility: take the reranked chunks and the original query, then use
-# Gemini 2.5 Flash Lite to synthesize a grounded, conversational answer.
+# Gemini 3.5 Flash Lite to synthesize a grounded, conversational answer.
 #
 # Why a separate synthesizer instead of doing this in the function handler?
 #   - Single responsibility — the synthesizer only knows about "chunks + query → answer"
@@ -35,7 +35,7 @@ Speak in a warm, conversational tone. No bullet points or markdown.
 
 async def synthesize(query: str, chunks: list[dict]) -> str:
     """
-    Synthesize a grounded answer from reranked chunks using Gemini 2.5 Flash Lite.
+    Synthesize a grounded answer from reranked chunks using Gemini 3.5 Flash Lite.
 
     Args:
         query:  the original user query
@@ -65,7 +65,7 @@ async def synthesize(query: str, chunks: list[dict]) -> str:
     )
 
     response = await client.aio.models.generate_content(
-        model="gemini-2.5-flash-lite",
+        model="gemini-3.5-flash-lite",
         contents=prompt,
         config={"system_instruction": _SYNTHESIS_SYSTEM_PROMPT},
     )
