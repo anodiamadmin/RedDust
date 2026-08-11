@@ -1,11 +1,11 @@
 # services/rag/embedder.py — Embedding pipeline
 #
 # Responsibility: take a list of text chunks (from parsers.py), embed them using
-# Google's text-embedding-004 model, and upsert the results into the pgvector
+# Google's gemini-embedding-001, and upsert the results into the pgvector
 # table `anodiam_knowledge` in PostgreSQL.
 #
-# Why text-embedding-004?
-#   - 768-dimensional output (good balance of quality vs storage)
+# Why gemini-embedding-001?
+#   - 3072-dimensional output (highest quality embeddings from Google)
 #   - Free tier available, production-ready
 #   - Already in our google-genai dependency — no extra package needed
 #
@@ -37,7 +37,7 @@ def _batch(items: list, size: int) -> list[list]:
 
 async def _embed_texts(texts: list[str]) -> list[list[float]]:
     """
-    Embed a list of texts using text-embedding-004.
+    Embed a list of texts using gemini-embedding-001.
     Processes in batches to stay within the API's 100-text-per-call limit.
     Returns a flat list of embedding vectors in the same order as input texts.
     """
