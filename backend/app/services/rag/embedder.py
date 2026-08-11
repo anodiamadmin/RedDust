@@ -13,18 +13,22 @@
 #   - Allows re-ingesting the same file without creating duplicates
 #   - Uses (filename, source, text) as a natural deduplication key via a unique index
 
+import json
 import uuid
 import asyncpg
+import math
 
 import google.genai as genai
 from app.config import settings
 from app.services.rag.parsers import Chunk
+from google.genai import types
 
 # Google embedding API limit: max 100 texts per batch call
 EMBEDDING_BATCH_SIZE = 100
 
-# Dimensionality of text-embedding-004 output — must match the vector column in DB
-EMBEDDING_DIM = 3072
+# # Dimensionality of gemini-embedding-001 output — must match the vector column in DB
+# max allowed by gemini-embedding-001 is 3072
+EMBEDDING_DIM = 1536    # pending Rajanya's response #
 
 # Initialise the Gemini client once at module load using the API key from config
 client = genai.Client(api_key=settings.GEMINI_API_KEY)
@@ -34,6 +38,13 @@ def _batch(items: list, size: int) -> list[list]:
     """Split a list into sub-lists of at most `size` items each."""
     return [items[i : i + size] for i in range(0, len(items), size)]
 
+# L2 normalization improves cosine similarity search accuracy.
+def normalize_embedding(vector: list[float]) -> list[float]:
+    """L2-normalize reduced-dimension Gemini embedding vectors for cosine search."""
+    norm = math.sqrt(sum(value * value for value in vector))
+    if norm == 0:
+        return vector
+    return [value / norm for value in vector]
 
 async def _embed_texts(texts: list[str]) -> list[list[float]]:
     """
@@ -47,9 +58,10 @@ async def _embed_texts(texts: list[str]) -> list[list[float]]:
         response = await client.aio.models.embed_content(
     		model="gemini-embedding-001",
     		contents=batch,
-)
+            config=types.EmbedContentConfig(output_dimensionality=EMBEDDING_DIM),
+        )
         # Each response.embeddings entry corresponds to one input text
-        all_embeddings.extend([e.values for e in response.embeddings])
+        all_embeddings.extend([normalize_embedding(e.values) for e in response.embeddings])
 
     return all_embeddings
 
@@ -64,7 +76,7 @@ async def embed_and_upsert(
 
     Steps:
       1. Extract plain text from each chunk
-      2. Embed all texts in batches via text-embedding-004
+      2. Embed all texts in batches via gemini-embedding-001
       3. Upsert each (text, embedding, metadata, domain) row into anodiam_knowledge
          — if a row with the same (filename, source, text) already exists, skip it
            (ON CONFLICT DO NOTHING) to avoid duplicates on re-ingestion
@@ -100,8 +112,8 @@ async def embed_and_upsert(
                 str(uuid.uuid4()),
                 chunk["text"],
                 vector_str,
-                # Store metadata as a JSON string; asyncpg handles the jsonb cast
-                str(chunk["metadata"]).replace("'", '"'),
+                # Store metadata as valid JSON; asyncpg handles the jsonb cast
+                json.dumps(chunk["metadata"]),
                 domain,
             )
             # asyncpg returns "INSERT 0 1" or "INSERT 0 0" — parse the count
