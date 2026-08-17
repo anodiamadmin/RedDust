@@ -47,9 +47,10 @@ async def retrieve_anodiam_knowledge(
         )
 
     # Step 2: Rerank — Gemini Flash Lite scores each chunk, returns top-5
-    reranked = await rerank(query=query, chunks=chunks)
+    #reranked = await rerank(query=query, chunks=chunks)
 
     # Step 3: Synthesize — Gemini Flash Lite generates a grounded answer
-    answer = await synthesize(query=query, chunks=reranked)
+    #answer = await synthesize(query=query, chunks=reranked)
+    answer = await synthesize(query=query, chunks=chunks)
 
     return answer

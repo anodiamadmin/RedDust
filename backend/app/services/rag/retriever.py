@@ -14,7 +14,9 @@
 #     subset, improving precision and reducing noise.
 
 import asyncpg
+import json
 import google.genai as genai
+from google.genai import types
 
 from app.config import settings
 from app.services.rag.embedder import EMBEDDING_DIM, normalize_embedding
@@ -86,7 +88,7 @@ async def retrieve(
     return [
         {
             "content": row["content"],
-            "metadata": row["metadata"],
+            "metadata": json.loads(row["metadata"]) if isinstance(row["metadata"], str) else row["metadata"],
             "score": row["score"],
         }
         for row in rows

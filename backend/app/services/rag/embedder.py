@@ -107,7 +107,7 @@ async def embed_and_upsert(
                 """
                 INSERT INTO anodiam_knowledge (id, content, embedding, metadata, domain)
                 VALUES ($1, $2, $3::vector, $4, $5)
-                ON CONFLICT (domain, content) DO NOTHING
+                ON CONFLICT (domain, content_hash) DO NOTHING
                 """,
                 str(uuid.uuid4()),
                 chunk["text"],
