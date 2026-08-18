@@ -1,17 +1,8 @@
-import { Text, View, StyleSheet } from "react-native";
+// src/app/index.tsx
+
+import { Redirect } from 'expo-router';
 
 export default function Index() {
-  return (
-    <View style={styles.container}>
-      <Text>Edit src/app/index.tsx to edit this screen.</Text>
-    </View>
-  );
+  // Instantly push the app to check the sign-in screen
+  return <Redirect href="/signin" />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
