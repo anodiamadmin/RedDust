@@ -1,60 +1,28 @@
-I need suggestions for the architecture of RedDust project which is a mobile app for a conversational AI where the users (example Kim) may log in to the app and voice chat (video chat in later releases/ version) with an conversational AI agent/ Radio Jockey cum wellbeing guide, henceforth referred to as Syan Bot or just Syan.
+Open "reddust-gateway" project.
 
-Syan will greet Kim, listen to Kim, play (recommend) a few (2-3) songs and tracks (together called as tracks) at a time, appropriate for the user, their current situation or activity and overall (short term and long term) wellbeing. Syan must also encourage for more engaging communication. Thus each interactive session may continue for an unlimited amount of time for a session of the user Kim with Bot Syan.
+> py -m venv .venv
+> .venv\Scripts\Activate.ps1
+> py --version
+3.14.7
+> pip --version
+26.2.1
+> pip show fastapi uvicorn aiortc av
 
-Through these interactions, Syan will develop in-depth idea about the music/ track choices, and (short term and long term) wellbeing of all the individual users like Kim. Anodiam's proprietary wellbeing model called as Soul-Score will be used to measure the short term and long term wellbeing of each individual user. The Soul Score model for each user will be constantly updated according to the conversation, music/ track listening pattern and interaction of the particular user and Syan. Users will be able to see and monitor their own Soul Score wellbeing in their dashboard.
-
-Currently the tracks will be from unverified YouTube/ Spotify links, later those will be from verified links and finally from our own proprietary cloud music/ track library.
-
-Attached diagram shows the tentative overall technical architecture of the RedDust app. We are now brainstorming as a team about specific technology implementation and different possible options at each stage.
-
-Keep this in attention. Do not reply to this query. I shall ask specific questions for the technical design of this app in future queries.
-
--------
-
-Client: Mobile/web app with real-time voice (later video), avatar rendering, music playback controls, and a wellbeing dashboard
-Sayan owns developed by 07/Aug
-
--------
-
-Real-time Gateway: WebRTC (audio/video) + WebSocket (control events) handling
-Back Burner
-
--------
-
-Conversation Engine: Step 1: STT + emotion must output a query by Kim (user) for Syan Bot 
-Back Burner
-
--------
-
-Conversation Engine: Step 2: LLM-driven dialog management with context/memory
-Soubhanik owns by 07/Aug
-
-Function that can be called within a (context + session)/memory of a FAST API POST request. This function must have a parameter through which a query can be passed to the LLM and whatever LLM returns must be returned.
-
--------
-
-Conversation Engine: Step 3:response generation (Syan's personality/RJ role)
-
--------
-
-Music Orchestrator: Recommends 2-3 tracks contextually, manages playback (play/pause/ducking during conversation)
-
-Soul-Score / Wellbeing Service: Anodiam's proprietary model, updated continuously from conversation + listening patterns, both short-term and long-term
-
-Session & Memory Service: Short-term (session) + long-term (persistent) memory per user
-
-Data layer: PostgreSQL, MongoDB, Redis, S3
-
-Music sourcing evolution: unverified YouTube/Spotify links → verified licensed links → proprietary library
-
-External integrations: LLM provider, STT/TTS, music streaming APIs, avatar/animation, push notifications
-
-
--------
-
-I now want to build this:
-
-React Native microphone → WebRTC → RedDust Gateway → echo → WebRTC → React Native speaker.
-
-Where do I start? Give me step by step direction.
+Open "reddust-mobile" project.
+> node --version
+v24.19.0
+> npm --version
+11.17.0
+> npx --version
+11.17.0
+> npx expo --version
+56.1.23
+> npm list react-native
+react-native@0.85.3
+> npm list typescript
+typescript@6.0.3
+> npm list expo-dev-client
+expo-dev-client@56.0.24
+> npm list react-native-webrtc
+react-native-webrtc@124.0.7
+> npx expo-doctor
