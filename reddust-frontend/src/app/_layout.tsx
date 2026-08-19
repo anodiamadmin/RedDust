@@ -1,57 +1,68 @@
 // src/app/_layout.tsx
 
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { Stack, useRouter, usePathname } from 'expo-router';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { useAuthStore } from '../store/useAuthStore';
+import { useFonts } from 'expo-font';
 
-// Keep the splash screen visible while checking auth state
+// Keep splash screen visible while loading resources
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const segments = useSegments();
+  const pathname = usePathname();
   const router = useRouter();
   const [isReady, setIsReady] = useState(false);
 
-  // Initialize and check hydration state
-  useEffect(() => {
-    const initializeAuth = async () => {
-      // Short delay to allow secure storage / Zustand state to hydrate
-      setTimeout(() => {
-        setIsReady(true);
-      }, 300);
-    };
+  // Load the official Google Sans font from your assets folder
+  const [fontsLoaded] = useFonts({
+    'GoogleSans-Medium': require('../../assets/fonts/GoogleSans-Medium.ttf'),
+  });
 
-    initializeAuth();
+  // Wait for Zustand to finish loading persisted storage from device disk
+  useEffect(() => {
+    const checkHydration = () => {
+      if (useAuthStore.persist.hasHydrated()) {
+        setIsReady(true);
+      } else {
+        const unsubHydrate = useAuthStore.persist.onFinishHydration(() => {
+          setIsReady(true);
+        });
+        return unsubHydrate;
+      }
+    };
+    checkHydration();
   }, []);
 
   // Traffic Cop / Routing Guard Effect
   useEffect(() => {
-    if (!isReady) return;
+    // Wait until both storage hydration AND font loading are completely done
+    if (!isReady || !fontsLoaded) return; 
 
-    const inAuthGroup = segments[0] === '(tabs)';
+    const timer = setTimeout(() => {
+      const isSignInScreen = pathname === '/signin';
 
-    if (!isAuthenticated && inAuthGroup) {
-      // If not logged in and trying to access tabs, kick them back to sign-in
-      router.replace('/signin');
-    } else if (isAuthenticated && !inAuthGroup) {
-      // If logged in and sitting on sign-in, warp them straight to tabs
-      router.replace('/(tabs)');
-    }
+      if (!isAuthenticated && !isSignInScreen) {
+        router.replace('/signin');
+      } else if (isAuthenticated && isSignInScreen) {
+        router.replace('/');
+      }
 
-    // Hide the splash screen once routing decision has been enforced
-    SplashScreen.hideAsync();
-  }, [isAuthenticated, isReady, segments]);
+      SplashScreen.hideAsync();
+    }, 50);
 
-  if (!isReady) {
-    return null; // Prevent flashing while verifying auth state
+    return () => clearTimeout(timer);
+  }, [isAuthenticated, isReady, fontsLoaded, pathname]); 
+
+  if (!isReady || !fontsLoaded) {
+    return null; 
   }
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="signin" />
-      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="(app)" />
     </Stack>
   );
 }
