@@ -2,7 +2,7 @@ Open "reddust-gateway" project.
 
 > py -m venv .venv
 > .venv\Scripts\Activate.ps1
-> py --version
+> python --version
 3.14.7
 > pip --version
 26.2.1
@@ -26,3 +26,11 @@ expo-dev-client@56.0.24
 > npm list react-native-webrtc
 react-native-webrtc@124.0.7
 > npx expo-doctor
+If the following issues come forward:
+🔧 Patch version mismatches
+package          expected  found    
+@expo/ui         ~56.0.26  56.0.25  
+expo-dev-client  ~56.0.25  56.0.24  
+expo-image       ~56.0.12  56.0.11  
+expo-linking     ~56.0.17  56.0.16  
+expo-router      ~56.2.19  56.2.18  
