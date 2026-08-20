@@ -1,26 +1,29 @@
 // src/app/_layout.tsx
 
-import { Stack, useRouter, usePathname } from 'expo-router';
+import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { useAuthStore } from '../store/useAuthStore';
 import { useFonts } from 'expo-font';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-// Keep splash screen visible while loading resources
+// 1. CONFIGURE GOOGLE AT THE ABSOLUTE ROOT
+// Now it works flawlessly even if the sign-in screen never mounts!
+GoogleSignin.configure({
+  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, 
+  iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID, 
+  offlineAccess: true,
+});
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const pathname = usePathname();
-  const router = useRouter();
   const [isReady, setIsReady] = useState(false);
 
-  // Load the official Google Sans font from your assets folder
   const [fontsLoaded] = useFonts({
     'GoogleSans-Medium': require('../../assets/fonts/GoogleSans-Medium.ttf'),
   });
 
-  // Wait for Zustand to finish loading persisted storage from device disk
   useEffect(() => {
     const checkHydration = () => {
       if (useAuthStore.persist.hasHydrated()) {
@@ -35,25 +38,11 @@ export default function RootLayout() {
     checkHydration();
   }, []);
 
-  // Traffic Cop / Routing Guard Effect
   useEffect(() => {
-    // Wait until both storage hydration AND font loading are completely done
-    if (!isReady || !fontsLoaded) return; 
-
-    const timer = setTimeout(() => {
-      const isSignInScreen = pathname === '/signin';
-
-      if (!isAuthenticated && !isSignInScreen) {
-        router.replace('/signin');
-      } else if (isAuthenticated && isSignInScreen) {
-        router.replace('/');
-      }
-
+    if (isReady && fontsLoaded) {
       SplashScreen.hideAsync();
-    }, 50);
-
-    return () => clearTimeout(timer);
-  }, [isAuthenticated, isReady, fontsLoaded, pathname]); 
+    }
+  }, [isReady, fontsLoaded]); 
 
   if (!isReady || !fontsLoaded) {
     return null; 

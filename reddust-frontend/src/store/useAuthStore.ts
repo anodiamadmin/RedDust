@@ -3,13 +3,14 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
+import { useAppStore } from './useAppStore'; // Import AppStore to reset it on logout
 
 interface AuthState {
   isAuthenticated: boolean;
-  userInfo: any | null; // Holds Google profile data
-  signIn: (user: any) => void;
-  signOut: () => Promise<void>; // 1. Make this return a Promise since native signout is async
+  userInfo: User | null; // <-- Replaced 'any' with the OFFICIAL Google User type
+  signIn: (user: User) => void;
+  signOut: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -17,24 +18,28 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       isAuthenticated: false, 
       userInfo: null,
+      
       signIn: (user) => set({ isAuthenticated: true, userInfo: user }),
       
-      // 2. Make signOut async and call GoogleSignin.signOut()
       signOut: async () => {
         try {
-          // This forces Google to forget the session and show the account picker next time
+          // Attempt to clear Google session
           await GoogleSignin.signOut(); 
         } catch (error) {
           console.error("Error signing out from Google: ", error);
+          // We don't throw here; we still want to clear local state even if offline
         }
         
-        // Clear local Zustand state after Google confirms sign out
+        // 1. Clear local Auth state
         set({ isAuthenticated: false, userInfo: null });
+        
+        // 2. Clear local App state (Prevents data leaking to the next user)
+        useAppStore.getState().resetAppStore();
       },
     }),
     {
-      name: 'reddust-auth-storage', // Unique storage key name
-      storage: createJSONStorage(() => AsyncStorage), // Persists to device storage
+      name: 'reddust-auth-storage', 
+      storage: createJSONStorage(() => AsyncStorage), 
     }
   )
 );

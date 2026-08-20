@@ -1,48 +1,57 @@
 // src/components/Header.tsx
 
 import React from 'react';
-import { View, Text, Pressable, Switch, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAppStore } from '../store/useAppStore';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
 
 export default function Header() {
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   const { activePersona, togglePersona } = useAppStore();
   const isSara = activePersona === 'sara';
 
   const handleOpenDrawer = () => {
-    // Native Expo Router drawer trigger
-    const navAny = navigation as any;
-    if (navAny.openDrawer) {
-      navAny.openDrawer();
-    } else if (navAny.getParent?.()) {
-      navAny.getParent().openDrawer?.();
-    }
+    navigation.dispatch({ type: 'OPEN_DRAWER' });
   };
 
+  const thumbStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: withTiming(isSara ? 16 : 0, { duration: 200 }) }],
+  }));
+
+  const thumbColor = isSara ? '#e42b10' : '#003153';
+  const trackColor = isSara ? 'rgba(228, 43, 16, 0.2)' : 'rgba(0, 49, 83, 0.2)';
+
   return (
-    <BlurView intensity={30} tint="dark" style={styles.header}>
-      {/* Hamburger Menu - Fully tappable */}
+    <BlurView 
+      intensity={80} // Matched to GlassTabBar's intensity
+      tint="dark" 
+      style={[styles.header, { paddingTop: insets.top + 12 }]}
+    >
       <Pressable onPress={handleOpenDrawer} style={styles.menuButton}>
         <MaterialIcons name="menu" size={26} color="#e5e1e4" />
       </Pressable>
 
-      {/* Dynamic Title */}
       <Text style={styles.title}>
         {isSara ? 'With Sara' : 'With Syan'}
       </Text>
 
-      {/* Persona Toggle */}
-      <View style={styles.toggleContainer}>
-        <Switch 
-          value={isSara}
-          onValueChange={togglePersona}
-          trackColor={{ false: '#003153', true: '#e42b10' }}
-          thumbColor="#ffffff"
+      <Pressable 
+        onPress={togglePersona}
+        style={[styles.switchTrack, { backgroundColor: trackColor }]}
+      >
+        <Animated.View 
+          style={[
+            styles.switchThumb, 
+            { backgroundColor: thumbColor }, 
+            thumbStyle
+          ]} 
         />
-      </View>
+      </Pressable>
     </BlurView>
   );
 }
@@ -58,10 +67,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 50,
     paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: 'rgba(28, 27, 29, 0.95),', // Matched exact glass background color from GlassTabBar
   },
   menuButton: {
     padding: 8,
@@ -73,8 +82,19 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     letterSpacing: 0.5,
   },
-  toggleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  switchTrack: {
+    width: 38,
+    height: 16,
+    borderRadius: 8,
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  switchThumb: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    position: 'absolute',
+    top: -3,
+    left: 0,
   },
 });

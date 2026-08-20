@@ -4,18 +4,11 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
 import { useAuthStore } from '../store/useAuthStore';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { router } from 'expo-router';
-
-// --- GOOGLE CONFIGURATION ---
-GoogleSignin.configure({
-  webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, 
-  offlineAccess: true,
-});
+import { router } from 'expo-router'; // 1. IMPORT ROUTER HERE
 
 export default function GoogleSignInButton() {
   const signInStore = useAuthStore((state) => state.signIn);
 
-  // --- Real Google Sign-In Logic ---
   const handleGoogleSignIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
@@ -23,8 +16,13 @@ export default function GoogleSignInButton() {
       
       if (response.type === 'success') {
         console.log("SUCCESS! User Info: ", response.data);
+        
+        // 2. Update global state
         signInStore(response.data);
-        router.replace('/');
+        
+        // 3. TELL EXPO ROUTER TO GO TO THE MAIN APP (ADD THIS BACK)
+        router.replace('/'); 
+        
       } else if (response.type === 'cancelled') {
         console.log('User cancelled the login flow by pressing back.');
       }
@@ -49,13 +47,10 @@ export default function GoogleSignInButton() {
       onPress={handleGoogleSignIn}
     >
       <View style={styles.buttonContent}>
-        
-        {/* The PNG is absolutely positioned to the left */}
         <Image 
           source={require('../../assets/images/google-logo.png')} 
           style={styles.googleIconImage} 
         />
-        
         <Text style={styles.buttonText}>Sign in with Google</Text>
       </View>
     </Pressable>
