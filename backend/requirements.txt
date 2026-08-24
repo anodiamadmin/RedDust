@@ -8,3 +8,4 @@ pgvector
 openpyxl
 python-docx
 httpx
+cachetools

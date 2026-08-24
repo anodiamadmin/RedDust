@@ -3,13 +3,13 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { Drawer } from 'expo-router/drawer';
+import { Redirect } from 'expo-router'; // <-- NEW IMPORT
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuthStore } from '../../store/useAuthStore';
 
-// Expanded music player modal floats above everything at root level
-import ExpandedMusicPlayer from '../../components/ExpandedMusicPlayer';
+import MusicPlayer from '../../components/MusicPlayer';
 
 function CustomDrawerContent(props: any) {
   const insets = useSafeAreaInsets();
@@ -33,6 +33,14 @@ function CustomDrawerContent(props: any) {
 }
 
 export default function AppDrawerLayout() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
+  // 2. THE OFFICIAL EXPO ROUTER GUARD
+  // If user logs out, instantly force the URL to the signin page
+  if (!isAuthenticated) {
+    return <Redirect href="/signin" />;
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={{ flex: 1, backgroundColor: '#131315' }}>
@@ -40,7 +48,7 @@ export default function AppDrawerLayout() {
           drawerContent={(props) => <CustomDrawerContent {...props} />}
           screenOptions={{
             headerShown: false,
-            drawerType: 'front', // Standard drawer slides naturally over header & content
+            drawerType: 'front', 
             drawerStyle: {
               backgroundColor: '#131315',
               width: '75%',
@@ -52,13 +60,13 @@ export default function AppDrawerLayout() {
         >
           <Drawer.Screen name="(tabs)" options={{ drawerLabel: 'Home' }} />
         </Drawer>
-
-        {/* FULL SCREEN EXPANDED MUSIC PLAYER MODAL */}
-        <ExpandedMusicPlayer />
+        <MusicPlayer />
       </View>
     </GestureHandlerRootView>
   );
 }
+
+// ... styles remain the same
 
 const styles = StyleSheet.create({
   footer: {

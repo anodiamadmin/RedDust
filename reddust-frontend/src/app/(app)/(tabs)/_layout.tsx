@@ -7,8 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// Standalone draggable music dock
-import FloatingMusicDock from '../../../components/FloatingMusicDock';
+import Header from '../../../components/Header';
 
 function GlassTabBar({ state, descriptors, navigation }: any) {
   const insets = useSafeAreaInsets();
@@ -31,15 +30,15 @@ function GlassTabBar({ state, descriptors, navigation }: any) {
             }
           };
 
-          let iconName: any = 'mic';
+          let iconName: keyof typeof MaterialIcons.glyphMap = 'mic';
           let label = 'Soulmate';
 
           if (route.name === 'index') {
             label = 'Soulmate';
             iconName = 'mic';
           } else if (route.name === 'soul-space') {
-            iconName = 'favorite-border';
             label = 'Soul Space';
+            iconName = 'favorite-border';
           }
 
           const brandRed = '#e42b10';
@@ -70,7 +69,8 @@ function GlassTabBar({ state, descriptors, navigation }: any) {
 
 export default function TabLayout() {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#0a0a0c' }}>
+      <Header />
       <Tabs
         tabBar={(props) => <GlassTabBar {...props} />}
         screenOptions={{ headerShown: false }}
@@ -78,9 +78,6 @@ export default function TabLayout() {
         <Tabs.Screen name="index" />
         <Tabs.Screen name="soul-space" />
       </Tabs>
-
-      {/* Floating music player dock */}
-      <FloatingMusicDock />
     </View>
   );
 }
@@ -103,6 +100,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: 'rgba(255, 255, 255, 0.05)',
     backgroundColor: 'rgba(28, 27, 29, 0.95)',
+    overflow: 'hidden',
   },
   tabItem: {
     alignItems: 'center',
