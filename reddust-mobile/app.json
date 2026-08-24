@@ -50,6 +50,8 @@
       ],
       "@config-plugins/react-native-webrtc",
       "expo-image"
+      "@config-plugins/react-native-webrtc",
+      "expo-image"
     ],
     "experiments": {
       "typedRoutes": true,
