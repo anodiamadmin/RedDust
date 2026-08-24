@@ -1,7 +1,5 @@
 # Environments / secrets
 .env
-.env.*
-!.env.example
 
 # Python
 __pycache__/
@@ -9,6 +7,7 @@ __pycache__/
 *$py.class
 .venv/
 venv/
+venv_windows/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
