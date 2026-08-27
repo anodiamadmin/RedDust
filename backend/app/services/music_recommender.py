@@ -1,17 +1,17 @@
 # services/music_recommender.py — Context-aware music recommendation engine
 #
 # Responsibility:
-#   Given a user_id, session_id, and current mood hint, build a rich context
+#   Given a user_id, session_id, mood and session signals, build a rich context
 #   from the database (preferences, soul score, reaction history) and ask
 #   Gemini Flash to suggest 2-3 smart YouTube search queries tailored to that user.
 #
-# Why not just use the mood→query map in music.py?
-#   The hardcoded map is a placeholder. It gives every anxious user the same
-#   search query regardless of taste. This module replaces that with personalised
-#   recommendations grounded in actual user data.
+# Why not just use the mood→query map?
+#   The hardcoded map gives every anxious user the same search query regardless
+#   of taste. This module replaces that with personalised recommendations grounded
+#   in actual user data and real-time session signals from Gemini Live.
 #
 # How it fits into the flow:
-#   Gemini Live calls get_music_recommendation(mood="anxious")
+#   Gemini Live calls get_music_recommendation(mood_hint, desired_mood, activity, ...)
 #   → function_dispatcher routes to music.py handle_get_music_recommendation()
 #   → that calls build_music_recommendation_context() + recommend_tracks() here
 #   → gets back 2-3 query strings
@@ -20,7 +20,7 @@
 #
 # Fallback behaviour:
 #   If DB is unavailable, user has no preferences, or Gemini fails →
-#   falls back to the hardcoded mood→query map from music.py. Never crashes.
+#   falls back to the hardcoded mood→query map. Never crashes.
 
 import json
 import logging
@@ -104,7 +104,7 @@ async def build_music_recommendation_context(
             # ----------------------------------------------------------------
             pref_rows = await conn.fetch("""
                 SELECT preference_type, preference_value, confidence, source
-                FROM user_music_preference
+                FROM reddust.user_music_preference
                 WHERE user_id = $1
                 ORDER BY confidence DESC
             """, user_id)
@@ -125,15 +125,16 @@ async def build_music_recommendation_context(
             # ----------------------------------------------------------------
             score_rows = await conn.fetch("""
                 SELECT dimension_name, final_score, duration_code, dashboard_rank
-                FROM v_user_dashboard_soul_score
+                FROM reddust.v_user_dashboard_soul_score
                 WHERE user_id = $1
                 ORDER BY dashboard_rank
             """, user_id)
 
+            # soul score list comprehension
             context["soul_scores"] = [
                 {
                     "dimension_name": r["dimension_name"],
-                    "final_score":    float(r["final_score"]) if r["final_score"] else None,
+                    "final_score": float(r["final_score"]) if r["final_score"] is not None else None,
                     "duration_code":  r["duration_code"],
                 }
                 for r in score_rows
@@ -151,9 +152,9 @@ async def build_music_recommendation_context(
                     mrr.skipped,
                     mrr.completed,
                     mrr.played
-                FROM music_recommendation mr
-                JOIN music_track mt ON mt.track_id = mr.track_id
-                LEFT JOIN music_recommendation_reaction mrr
+                FROM reddust.music_recommendation mr
+                JOIN reddust.music_track mt ON mt.track_id = mr.track_id
+                LEFT JOIN reddust.music_recommendation_reaction mrr
                        ON mrr.recommendation_id = mr.recommendation_id
                 WHERE mr.user_id = $1
                 ORDER BY mr.recommended_at DESC
@@ -183,23 +184,26 @@ async def recommend_tracks(
     session_id: UUID,
     current_mood_hint: str,
     context: dict,
+    desired_mood: Optional[str] = None,
+    activity: Optional[str] = None,
+    energy_level: Optional[str] = None,
+    time_of_day: Optional[str] = None,
+    session_goal: Optional[str] = None,
 ) -> list[dict]:
     """
-    Ask Gemini Flash to suggest 2-3 YouTube search queries based on user context.
-
-    Uses the context built by build_music_recommendation_context() plus the
-    current mood hint. Returns a list of query dicts each with:
-        - query_string:    the YouTube search query to run
-        - desired_outcome: what emotional effect this track should have
-        - rationale:       why this was chosen given the user's context
-
-    Falls back to mood-only hardcoded queries on any Gemini failure.
+    Ask Gemini Flash to suggest 2-3 YouTube search queries based on user context
+    and real-time session signals passed by Gemini Live.
 
     Args:
         user_id:           The user's UUID (for logging)
         session_id:        The current session's UUID (for logging)
-        current_mood_hint: Current detected mood (e.g. "anxious", "tired")
+        current_mood_hint: Current detected mood (e.g. "anxious", "tired") — required
         context:           Output of build_music_recommendation_context()
+        desired_mood:      Where the user wants to go emotionally (optional)
+        activity:          What the user is doing — study, sleep, workout, etc. (optional)
+        energy_level:      low | medium | high (optional)
+        time_of_day:       morning | afternoon | evening | night (optional)
+        session_goal:      What the user wants to achieve this session (optional)
 
     Returns:
         list of 1-3 dicts with keys: query_string, desired_outcome, rationale
@@ -216,8 +220,16 @@ async def recommend_tracks(
         )
         return _fallback_queries(current_mood_hint)
 
-    # Build the prompt — structured so Gemini returns clean JSON only
-    prompt = _build_prompt(current_mood_hint, context)
+    # Build the prompt with all available signals
+    prompt = _build_prompt(
+        mood=current_mood_hint,
+        context=context,
+        desired_mood=desired_mood,
+        activity=activity,
+        energy_level=energy_level,
+        time_of_day=time_of_day,
+        session_goal=session_goal,
+    )
 
     try:
         response = await _gemini_client.aio.models.generate_content(
@@ -268,17 +280,49 @@ async def recommend_tracks(
 # Internal helpers
 # ---------------------------------------------------------------------------
 
-def _build_prompt(mood: str, context: dict) -> str:
+def _build_prompt(
+    mood: str,
+    context: dict,
+    desired_mood: Optional[str] = None,
+    activity: Optional[str] = None,
+    energy_level: Optional[str] = None,
+    time_of_day: Optional[str] = None,
+    session_goal: Optional[str] = None,
+) -> str:
     """
-    Build the Gemini prompt for music recommendation.
+    Build the Gemini Flash prompt for music recommendation.
+
+    Incorporates all available real-time signals alongside the DB context.
+    The more signals provided, the more targeted the query suggestions will be.
 
     The prompt is strict:
-      - Returns JSON only (enforced by response_mime_type above)
+      - Returns JSON only (enforced by response_mime_type in the caller)
       - 2-3 YouTube search query strings tailored to the user
       - Each query must be specific enough to surface the right content
         (e.g. "AR Rahman 90s melodic instrumental" not just "Indian music")
     """
-    preferences_text = ""
+    # ----------------------------------------------------------------
+    # Section 1: Real-time session signals from Gemini Live
+    # Only include lines for signals that were actually provided
+    # ----------------------------------------------------------------
+    session_lines = [f"Current mood: {mood}"]
+
+    if desired_mood:
+        session_lines.append(f"Desired mood (where they want to go): {desired_mood}")
+    if activity:
+        session_lines.append(f"Activity: {activity}")
+    if energy_level:
+        session_lines.append(f"Energy level: {energy_level}")
+    if time_of_day:
+        session_lines.append(f"Time of day: {time_of_day}")
+    if session_goal:
+        session_lines.append(f"Session goal: {session_goal}")
+
+    session_signals_text = "\n".join(session_lines)
+
+    # ----------------------------------------------------------------
+    # Section 2: User preferences from DB
+    # ----------------------------------------------------------------
     if context["preferences"]:
         lines = [
             f"  - {p['preference_type']}: {p['preference_value']} (confidence: {p['confidence']:.0%})"
@@ -288,7 +332,9 @@ def _build_prompt(mood: str, context: dict) -> str:
     else:
         preferences_text = "Known music preferences: none yet (new user)"
 
-    soul_score_text = ""
+    # ----------------------------------------------------------------
+    # Section 3: Soul scores from DB
+    # ----------------------------------------------------------------
     if context["soul_scores"]:
         lines = [
             f"  - {s['dimension_name']}: {s['final_score']}/100"
@@ -299,7 +345,9 @@ def _build_prompt(mood: str, context: dict) -> str:
     else:
         soul_score_text = "Current Soul Score: not yet computed (new user)"
 
-    recent_text = ""
+    # ----------------------------------------------------------------
+    # Section 4: Recent track reactions from DB
+    # ----------------------------------------------------------------
     if context["recent_tracks"]:
         lines = []
         for t in context["recent_tracks"]:
@@ -318,18 +366,23 @@ def _build_prompt(mood: str, context: dict) -> str:
     return f"""You are Syan, an AI music wellbeing companion. Your job is to suggest YouTube search queries
 that will find music perfectly suited to this user's current emotional state and personal taste.
 
-Current mood: {mood}
+--- SESSION SIGNALS ---
+{session_signals_text}
 
+--- USER PROFILE ---
 {preferences_text}
 
 {soul_score_text}
 
 {recent_text}
 
-Instructions:
+--- INSTRUCTIONS ---
 - Suggest exactly 2-3 YouTube search query strings.
 - Each query must be specific and searchable (e.g. "AR Rahman relaxing instrumental Hindi" not "Indian music").
-- Prioritise the user's known preferences when they align with the mood.
+- Prioritise the user's known preferences when they align with the mood and activity.
+- If a desired_mood is provided, select music that will guide the user FROM their current mood TOWARD the desired mood.
+- If a session_goal is provided, shape the music arc to support that goal across multiple tracks.
+- If a time_of_day is provided, match the music energy to natural daily rhythms (e.g. avoid high-energy tracks at night).
 - Avoid suggesting tracks similar to recently skipped or low-rated ones.
 - For each query, provide a desired_outcome (what emotional effect it should have) and a rationale.
 
@@ -338,7 +391,7 @@ Return ONLY a JSON array. No preamble, no markdown. Example format:
   {{
     "query_string": "AR Rahman soft melodic instrumental 90s",
     "desired_outcome": "gentle mood lift with familiar nostalgia",
-    "rationale": "User loves AR Rahman and 90s music; soft instrumental suits anxious state"
+    "rationale": "User loves AR Rahman and 90s music; soft instrumental suits anxious state moving toward calm"
   }}
 ]"""
 

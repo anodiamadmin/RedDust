@@ -25,6 +25,9 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
+# Gemini client — module-level singleton, reused across all calls (same pattern as music_recommender.py)
+_gemini_client = genai.Client(api_key=settings.GEMINI_API_KEY)
+
 # Confidence threshold to write into user_music_preference conclusions table
 _CONFIDENCE_THRESHOLD = 0.8
 
@@ -95,9 +98,7 @@ async def extract_preferences_from_turn(
         return
 
     try:
-        client = genai.Client(api_key=settings.GEMINI_API_KEY)
-
-        response = client.models.generate_content(
+        response = await _gemini_client.aio.models.generate_content(
             model="gemini-3.5-flash-lite",
             contents=_EXTRACTION_PROMPT.replace("{turn_text}", turn_text.strip()),
             config=types.GenerateContentConfig(
