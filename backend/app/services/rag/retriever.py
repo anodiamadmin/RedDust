@@ -76,7 +76,7 @@ async def retrieve(
                 -- cosine distance: lower = more similar, so we invert for a score
                 1 - (embedding <=> $1::vector) AS score
             FROM anodiam_knowledge
-            WHERE domain = $2
+            WHERE ($2::text IS NULL OR domain = $2)
             ORDER BY embedding <=> $1::vector
             LIMIT $3
             """,

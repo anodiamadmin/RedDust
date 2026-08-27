@@ -19,7 +19,7 @@
 #
 # Registered functions (must match the tool declarations sent to Gemini Live):
 #   - fetch_user_context(user_id)         → Step 15
-#   - get_music_recommendation(mood)      → Step 16
+#   - get_music_recommendation(mood_hint) → Step 16
 #   - retrieve_anodiam_knowledge(query, domain) → Step 17
 
 import asyncpg
@@ -58,14 +58,19 @@ async def dispatch(
 
     elif function_name == "get_music_recommendation":
         result = await handle_get_music_recommendation(
-            mood=function_args["mood"],
+            args=function_args,
+            user_id=function_args["user_id"],
+            session_id=function_args["session_id"],
+            conversation_id=function_args["conversation_id"],
+            turn_id=function_args["turn_id"],
+            pool=pool,
         )
 
     elif function_name == "retrieve_anodiam_knowledge":
         result = await handle_retrieve_anodiam_knowledge(
             pool=pool,
             query=function_args["query"],
-            domain=function_args["domain"],
+            domain=function_args.get("domain"),
         )
 
     else:

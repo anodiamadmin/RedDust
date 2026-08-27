@@ -9,8 +9,21 @@
 #   4. Upsert verified tracks into music_track table
 #   5. Insert music_recommendation rows with rank + rationale
 #   6. Return list of {title, url, thumbnail, duration_ms, artist, rationale} as FunctionResponse
+#
+# Schema notes (music_track):
+#   - PK is track_id (UUID), not id
+#   - No artist/thumbnail_url columns — stored in metadata_json JSONB
+#   - duration_ms is a direct column
+#   - UNIQUE constraint on (provider, provider_track_id)
+#
+# Schema notes (music_recommendation):
+#   - FK to music_track is track_id (not music_track_id)
+#   - Rank column is recommendation_rank (not rank)
+#   - user_id is required (NOT NULL)
+#   - recommendation_context is JSONB (must pass dict, not string)
 
 import asyncio
+import json
 import logging
 from uuid import UUID
 
@@ -20,9 +33,6 @@ from app.services.music_recommender import build_music_recommendation_context, r
 from app.services.track_verifier import verify_and_fetch_track
 
 logger = logging.getLogger(__name__)
-
-# YouTube watch URL base
-_YT_WATCH_BASE = "https://www.youtube.com/watch?v="
 
 
 async def handle_get_music_recommendation(
@@ -38,31 +48,47 @@ async def handle_get_music_recommendation(
     invokes get_music_recommendation().
 
     Args:
-        args:            function call args from Gemini Live (expects 'mood_hint' key)
+        args:            function call args from Gemini Live. Expected keys:
+                           - mood_hint     (required) : current emotional state
+                           - desired_mood  (optional) : target emotional state
+                           - activity      (optional) : what the user is doing
+                           - energy_level  (optional) : low | medium | high
+                           - time_of_day   (optional) : morning | afternoon | evening | night
+                           - session_goal  (optional) : what the user wants to achieve this session
         user_id:         current user
         session_id:      current session
         conversation_id: current conversation
-        turn_id:         current turn number
+        turn_id:         current turn number (maps to conversation_turn.turn_id)
         pool:            asyncpg connection pool
 
     Returns:
         dict with key 'tracks': list of recommended track dicts, or 'error' on failure.
         Gemini Live reads track titles aloud; frontend handles playback via url.
     """
-    mood_hint = args.get("mood_hint", "neutral")
+    # Extract all signals Gemini may have passed — only mood_hint is required
+    mood_hint    = args.get("mood_hint", "neutral")
+    desired_mood = args.get("desired_mood")   # where the user wants to go emotionally
+    activity     = args.get("activity")       # study, sleep, workout, relax, etc.
+    energy_level = args.get("energy_level")   # low | medium | high
+    time_of_day  = args.get("time_of_day")    # morning | afternoon | evening | night
+    session_goal = args.get("session_goal")   # e.g. "focus for 3 hours", "wind down before sleep"
 
     try:
         # Step 1: build user context (preferences + soul score + recent reactions)
         context = await build_music_recommendation_context(user_id, session_id, pool)
 
         # Step 2: Gemini Flash generates personalised query strings
+        # All six signals passed so the prompt can use whichever are available
         recommendations = await recommend_tracks(
             user_id=user_id,
             session_id=session_id,
-            conversation_id=conversation_id,
-            turn_id=turn_id,
             current_mood_hint=mood_hint,
-            pool=pool,
+            desired_mood=desired_mood,
+            activity=activity,
+            energy_level=energy_level,
+            time_of_day=time_of_day,
+            session_goal=session_goal,
+            context=context,
         )
 
         if not recommendations:
@@ -70,7 +96,7 @@ async def handle_get_music_recommendation(
 
         # Step 3: verify each query string against YouTube API concurrently
         verify_tasks = [
-            verify_and_fetch_track(rec["query_string"], pool)
+            verify_and_fetch_track(rec["query_string"])
             for rec in recommendations
         ]
         verified_tracks = await asyncio.gather(*verify_tasks, return_exceptions=True)
@@ -83,48 +109,76 @@ async def handle_get_music_recommendation(
             for rec, track in zip(recommendations, verified_tracks):
                 # Skip failed verifications
                 if isinstance(track, Exception) or track is None:
-                    logger.warning("Track verification failed for query: %s", rec.get("query_string"))
+                    logger.warning(
+                        "Track verification failed for query: %s", rec.get("query_string")
+                    )
                     continue
 
+                # ----------------------------------------------------------
                 # Upsert into music_track
-                music_track_id = await conn.fetchval(
+                # Schema: PK=track_id, no artist/thumbnail columns —
+                # those go into metadata_json JSONB. duration_ms is a column.
+                # UNIQUE on (provider, provider_track_id).
+                # ----------------------------------------------------------
+                track_metadata = {
+                    "channel_title":  track.get("channel_title"),
+                    "thumbnail_url":  track.get("thumbnail_url"),
+                }
+
+                track_id = await conn.fetchval(
                     """
                     INSERT INTO reddust.music_track
-                        (provider, provider_track_id, title, artist, thumbnail_url, duration_ms, track_url)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        (provider, provider_track_id, title, duration_ms,
+                         track_url, metadata_json)
+                    VALUES ($1, $2, $3, $4, $5, $6)
                     ON CONFLICT (provider, provider_track_id)
                     DO UPDATE SET
-                        title        = EXCLUDED.title,
-                        artist       = EXCLUDED.artist,
-                        thumbnail_url= EXCLUDED.thumbnail_url,
-                        duration_ms  = EXCLUDED.duration_ms,
-                        track_url    = EXCLUDED.track_url
-                    RETURNING id
+                        title         = EXCLUDED.title,
+                        duration_ms   = EXCLUDED.duration_ms,
+                        track_url     = EXCLUDED.track_url,
+                        metadata_json = EXCLUDED.metadata_json
+                    RETURNING track_id
                     """,
                     track["provider"],
                     track["provider_track_id"],
                     track["title"],
-                    track.get("channel_title"),
-                    track.get("thumbnail_url"),
                     track.get("duration_ms"),
                     track["track_url"],
+                    json.dumps(track_metadata),   # JSONB — must be serialised string
                 )
 
+                # ----------------------------------------------------------
                 # Insert music_recommendation row
+                # Schema: FK=track_id, rank=recommendation_rank, user_id required,
+                # recommendation_context is JSONB (pass dict serialised as string)
+                # ----------------------------------------------------------
+                recommendation_context = {
+                    "mood_hint":    mood_hint,
+                    "desired_mood": desired_mood,
+                    "activity":     activity,
+                    "energy_level": energy_level,
+                    "time_of_day":  time_of_day,
+                    "session_goal": session_goal,
+                    "query_string": rec.get("query_string"),
+                    "desired_outcome": rec.get("desired_outcome"),
+                }
+
                 await conn.execute(
                     """
                     INSERT INTO reddust.music_recommendation
-                        (session_id, conversation_id, turn_id, music_track_id, rank,
-                         rationale, recommendation_context)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        (user_id, session_id, conversation_id, turn_id,
+                         track_id, recommendation_rank, rationale,
+                         recommendation_context)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
                     """,
+                    user_id,
                     session_id,
                     conversation_id,
                     turn_id,
-                    music_track_id,
+                    track_id,
                     rank,
                     rec.get("rationale"),
-                    rec.get("desired_outcome"),
+                    json.dumps(recommendation_context),  # JSONB — must be serialised
                 )
 
                 result_tracks.append({
@@ -146,109 +200,3 @@ async def handle_get_music_recommendation(
     except Exception as e:
         logger.exception("handle_get_music_recommendation failed: %s", e)
         return {"error": f"Music recommendation failed: {str(e)}"}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # services/functions/music.py — Music recommendation function handler
-# #
-# # Responsibility: given a mood string from Gemini Live, search YouTube Data API
-# # for a relevant track and return the top result's title + URL.
-# #
-# # Why YouTube Data API?
-# #   - Free tier (10,000 units/day) is sufficient for a wellness app
-# #   - No licensing issues — we return a URL, not the audio itself
-# #   - Wide catalogue covering ambient, classical, nature sounds, etc.
-# #
-# # How this fits into the session:
-# #   - Gemini Live calls get_music_recommendation(mood="anxious")
-# #   - function_dispatcher routes here
-# #   - We query YouTube, return {title, url}
-# #   - Gemini reads the title aloud and the frontend handles playback via the URL
-# #
-# # Mood → search query mapping:
-# #   - We don't pass the raw mood directly to YouTube (e.g. "anxious" returns
-# #     unpredictable results). Instead we map moods to curated search terms that
-# #     reliably surface calming/appropriate content.
-
-# import httpx
-# from app.config import settings
-
-# # Curated search terms per mood — tuned for wellness/ambient content
-# # Add more moods here as the product evolves
-# _MOOD_QUERY_MAP = {
-#     "anxious":   "calming anxiety relief music",
-#     "sad":       "gentle uplifting music for sadness",
-#     "happy":     "upbeat positive background music",
-#     "stressed":  "stress relief meditation music",
-#     "tired":     "relaxing sleep music ambient",
-#     "angry":     "calming music for anger relief",
-#     "neutral":   "peaceful background ambient music",
-#     "motivated": "motivational focus music",
-# }
-
-# # Fallback search term if mood is not in the map
-# _DEFAULT_QUERY = "peaceful background ambient music"
-
-# # YouTube Data API v3 search endpoint
-# _YT_SEARCH_URL = "https://www.googleapis.com/youtube/v3/search"
-
-
-# async def handle_get_music_recommendation(mood: str) -> dict:
-#     """
-#     Search YouTube Data API for a track matching the given mood.
-
-#     Args:
-#         mood: mood string as detected by Gemini Live (e.g. "anxious", "happy")
-
-#     Returns:
-#         dict with keys:
-#             - title: video title (Gemini reads this aloud)
-#             - url:   full YouTube watch URL (frontend uses this for playback)
-#             - error: present only if the API call fails
-#     """
-#     # Map mood to a curated search query, fall back to default if unknown
-#     query = _MOOD_QUERY_MAP.get(mood.lower(), _DEFAULT_QUERY)
-
-#     params = {
-#         "part": "snippet",
-#         "q": query,
-#         "type": "video",
-#         "maxResults": 1,           # We only need the top result
-#         "videoCategoryId": "10",   # Category 10 = Music
-#         "key": settings.YOUTUBE_API_KEY,
-#     }
-
-#     async with httpx.AsyncClient() as client:
-#         try:
-#             response = await client.get(_YT_SEARCH_URL, params=params, timeout=5.0)
-#             response.raise_for_status()
-#             data = response.json()
-
-#             items = data.get("items", [])
-#             if not items:
-#                 return {"error": "No results found for this mood."}
-
-#             video_id = items[0]["id"]["videoId"]
-#             title = items[0]["snippet"]["title"]
-
-#             return {
-#                 "title": title,
-#                 "url": f"https://www.youtube.com/watch?v={video_id}",
-#             }
-
-#         except httpx.HTTPError as e:
-#             # Return error payload instead of raising — Gemini should handle
-#             # gracefully rather than crashing the session
-#             return {"error": f"YouTube API error: {str(e)}"}
