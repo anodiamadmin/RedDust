@@ -16,7 +16,7 @@ import re
 from collections import Counter
 from typing import Optional, Sequence
 
-from app.schemas import ChatResponse, TrackRecommendation
+from app.schemas import ChatResponse
 
 
 # --- Mood keyword map ---
@@ -35,67 +35,7 @@ _MOOD_KEYWORDS = {
 	"angry": ("angry", "frustrated", "mad", "annoyed", "irritated", "furious"),
 }
 
-# --- Mood-to-track map ---
-# Each mood maps to a list of (title, youtube_url, reason) tuples.
-# Currently uses placeholder URLs — replace with real curated links in production.
-# Tracks are ordered by preference; recommend_tracks() slices the top N.
-_MOOD_TRACKS = {
-	"calm": [
-		("Gentle Rain Radio", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Keeps the room soft and steady."),
-		("Evening Lo-Fi Drift", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "A low-pressure backdrop for recovery."),
-		("Ambient Breath Session", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Helps slow the pace and settle attention."),
-	],
-	"sad": [
-		("Warm Acoustic Comfort", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Soft support without overwhelming energy."),
-		("Hopeful Piano Waves", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Keeps the mood gentle while lifting gradually."),
-		("Quiet Company Mix", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Feels present without asking too much."),
-	],
-	"stressed": [
-		("Reset Lo-Fi Flow", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Helps reduce mental clutter."),
-		("Focus Break Beats", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Gives the mind a clean tempo to follow."),
-		("Breathing Space Ambient", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Supports a short decompression pause."),
-	],
-	"anxious": [
-		("Grounding Pulse", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Steady rhythm without sharp changes."),
-		("Safe Harbor Instrumentals", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "A predictable sound bed can feel stabilizing."),
-		("Slow Drift Sessions", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Lets the energy settle before the next step."),
-	],
-	"tired": [
-		("Soft Wake-Up Mix", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Gentle enough to avoid a hard edge."),
-		("Low-Tempo Companion", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Keeps things calm while you recover."),
-		("Sunrise Ambient Set", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Slowly adds a little lift."),
-	],
-	"lonely": [
-		("Friendly Voice Radio", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Feels like company without pressure."),
-		("Heartline Acoustic Session", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Warm and human, with room to breathe."),
-		("Together Even When Apart", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Offers connection through steady sound."),
-	],
-	"happy": [
-		("Bright Mood Booster", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Matches the uplift without overdoing it."),
-		("Sunny Groove Set", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Keeps momentum moving forward."),
-		("Joy Ride Tracks", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Adds a playful edge to a good moment."),
-	],
-	"energetic": [
-		("Momentum Starter", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Supports action without losing control."),
-		("Pulse Drive Mix", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Keeps motivation high and focused."),
-		("Active Flow Radio", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Good for getting things done."),
-	],
-	"reflective": [
-		("Late Night Thoughts", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Leaves space for meaning-making."),
-		("Minimal Piano Journal", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Helps keep the mind clear while processing."),
-		("Soft Focus Instrumentals", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "A quiet backdrop for self-check-in."),
-	],
-	"angry": [
-		("Cooldown Bassline", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Helps discharge tension without escalation."),
-		("Slow Burn Reset", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Lets intensity settle into a steadier rhythm."),
-		("Clear Head Tracks", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Creates a buffer before the next response."),
-	],
-	"neutral": [
-		("Balanced Flow Radio", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "A safe default when mood is still unclear."),
-		("Everyday Companion Mix", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Works across most low-stakes moments."),
-		("Open Space Instrumentals", "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Leaves room for the conversation to guide us."),
-	],
-}
+
 
 # All valid mood labels — used to validate the LLM's detected_mood before trusting it
 _VALID_MOODS = set(_MOOD_KEYWORDS.keys()) | {"neutral"}
@@ -131,16 +71,7 @@ def detect_mood_from_keywords(user_message: str, history: Optional[Sequence[str]
 	return scores.most_common(1)[0][0]
 
 
-def recommend_tracks(mood: str, limit: int = 3) -> list[TrackRecommendation]:
-	"""
-	Returns the top `limit` track recommendations for the given mood.
-	Falls back to "neutral" tracks if an unrecognised mood is passed.
-	"""
-	track_rows = _MOOD_TRACKS.get(mood, _MOOD_TRACKS["neutral"])
-	return [
-		TrackRecommendation(title=title, youtube_url=youtube_url, reason=reason)
-		for title, youtube_url, reason in track_rows[:limit]
-	]
+
 
 
 def build_syan_response(
@@ -173,5 +104,5 @@ def build_syan_response(
 		session_id=session_id,
 		detected_mood=mood,
 		music_requested=music_requested,
-		tracks=recommend_tracks(mood),   # Always return 3 tracks for the detected mood
+		tracks=[],   # Always return 3 tracks for the detected mood
 	)

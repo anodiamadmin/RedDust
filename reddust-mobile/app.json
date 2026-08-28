@@ -48,7 +48,8 @@
           "imageWidth": 76
         }
       ],
-      
+      "@config-plugins/react-native-webrtc",
+      "expo-image"
       "@config-plugins/react-native-webrtc",
       "expo-image"
     ],
