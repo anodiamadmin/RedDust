@@ -15,6 +15,15 @@ import {
  * The methods exist at runtime, so we define only the event API
  * that RedDust currently needs.
  */
+type WebRTCTrackEvent = {
+  streams: MediaStream[];
+
+  track?: {
+    kind?: string;
+    id?: string;
+  };
+};
+
 type WebRTCPeerConnectionEvent =
   | "iceconnectionstatechange"
   | "connectionstatechange"
