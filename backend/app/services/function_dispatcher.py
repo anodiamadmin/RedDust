@@ -30,11 +30,17 @@ from app.services.functions.user_context import handle_fetch_user_context
 from app.services.functions.music import handle_get_music_recommendation
 from app.services.functions.knowledge import handle_retrieve_anodiam_knowledge
 
+from uuid import UUID
+
 
 async def dispatch(
     function_name: str,
     function_args: dict,
     pool: asyncpg.Pool,
+    user_id: UUID,
+    session_id: UUID,
+    conversation_id: UUID,
+    turn_id: int,
 ) -> FunctionResponse:
     """
     Route a Gemini Live function call to the correct handler and return a
@@ -53,16 +59,16 @@ async def dispatch(
     if function_name == "fetch_user_context":
         result = await handle_fetch_user_context(
             pool=pool,
-            user_id=function_args["user_id"],
+            user_id=user_id,
         )
 
     elif function_name == "get_music_recommendation":
         result = await handle_get_music_recommendation(
             args=function_args,
-            user_id=function_args["user_id"],
-            session_id=function_args["session_id"],
-            conversation_id=function_args["conversation_id"],
-            turn_id=function_args["turn_id"],
+            user_id=user_id,
+            session_id=session_id,
+            conversation_id=conversation_id,
+            turn_id=turn_id,
             pool=pool,
         )
 

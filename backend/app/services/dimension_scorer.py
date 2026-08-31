@@ -35,6 +35,8 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
+_ALGORITHM_VERSION = "1.0"  # Bump this when scoring logic changes
+
 # Minimum confidence to write a wellbeing_signal row
 _SIGNAL_CONFIDENCE_THRESHOLD = 0.75
 

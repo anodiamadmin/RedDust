@@ -5,6 +5,8 @@
 # Never hardcode secrets in source code; always load from environment.
 
 from pydantic_settings import BaseSettings
+import logging
+from pydantic import model_validator
 
 
 class Settings(BaseSettings):
@@ -33,10 +35,19 @@ class Settings(BaseSettings):
     # Change to "hi" for Hindi-first results, or leave as "en" for mixed.
     YOUTUBE_LANGUAGE: str = "en"
 
+    @model_validator(mode='after')
+    def check_critical_keys(self) -> 'Settings':
+        """Warn at startup if required external API keys are missing."""
+        if not self.YOUTUBE_API_KEY:
+            logging.warning(
+                "YOUTUBE_API_KEY is not set — YouTube track search will fail with 403. "
+                "Add it to your .env file."
+            )
+        return self
+
     class Config:
         # Tells pydantic-settings to read from .env file in addition to real env vars
         env_file = ".env"
-
 
 # Singleton settings instance — imported across the app wherever config is needed
 settings = Settings()   # type: ignore

@@ -104,5 +104,5 @@ def build_syan_response(
 		session_id=session_id,
 		detected_mood=mood,
 		music_requested=music_requested,
-		tracks=[],   # Always return 3 tracks for the detected mood
+		tracks=[],    # Music handled via Gemini Live function calls — not returned in the HTTP chat flow
 	)

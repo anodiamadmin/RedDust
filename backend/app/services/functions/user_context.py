@@ -7,6 +7,7 @@
 #     2. Music preferences (genre, artist, decade, etc.)
 #     3. Latest soul score per wellbeing dimension
 #     4. Recent conversation summaries (last 3 sessions — what was discussed)
+#     5. Latest period summary (quarterly/monthly long-arc wellbeing narrative)
 #
 # Why this matters:
 #   Without this, every session is cold-start. Syan can't say "Last time you
@@ -41,7 +42,7 @@ async def handle_fetch_user_context(
     Fetch all personalization context for a user from PostgreSQL.
 
     Called by function_dispatcher when Gemini Live invokes fetch_user_context().
-    Runs 4 queries in a single acquired connection and assembles one dict.
+    Runs 5 queries in a single acquired connection and assembles one dict.
 
     Args:
         pool:    asyncpg connection pool (app.state.pool)
@@ -53,6 +54,7 @@ async def handle_fetch_user_context(
             timezone         (str | None)
             preferences      (list of {preference_type, preference_value, confidence, source})
             soul_scores      (list of {dimension_name, final_score, duration_code})
+            period_summary   ({period_type, period_start, period_end, summary_text} | None)
             recent_sessions  (list of {session_date, summary_text})
         On any error, returns {"error": <message>} so Gemini can handle gracefully.
     """
@@ -62,6 +64,7 @@ async def handle_fetch_user_context(
         "preferences":     [],
         "soul_scores":     [],
         "recent_sessions": [],
+        "period_summary":  None,   # latest long-arc wellbeing summary (weekly/monthly/quarterly/yearly)
     }
 
     try:
@@ -154,6 +157,31 @@ async def handle_fetch_user_context(
                 }
                 for r in session_rows
             ]
+
+            # ----------------------------------------------------------------
+            # 5. Period summary — latest long-arc wellbeing narrative.
+            #    user_period_summary stores weekly/monthly/quarterly/yearly
+            #    AI-generated summaries. The most recent one gives Syan a
+            #    multi-week or multi-month picture of the user's journey —
+            #    e.g. "This user has been struggling with anxiety and low
+            #    motivation over the past quarter but is showing improvement."
+            #    NULL if the user has never had a period summary generated.
+            # ----------------------------------------------------------------
+            period_row = await conn.fetchrow("""
+                SELECT period_type, period_start, period_end, summary_text
+                FROM reddust.user_period_summary
+                WHERE user_id = $1
+                ORDER BY generated_at DESC
+                LIMIT 1
+            """, user_id)
+
+            if period_row:
+                context["period_summary"] = {
+                    "period_type":  period_row["period_type"],
+                    "period_start": str(period_row["period_start"]),
+                    "period_end":   str(period_row["period_end"]),
+                    "summary_text": period_row["summary_text"],
+                }
 
     except Exception as e:
         logger.exception("handle_fetch_user_context failed for user=%s: %s", user_id, e)

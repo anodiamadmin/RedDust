@@ -46,11 +46,12 @@ async def retrieve_anodiam_knowledge(
             "I don't have relevant information in my knowledge base for that topic."
         )
 
-    # Step 2: Rerank — currently DISABLED (bypassed)
-    # reranked = await rerank(query=query, chunks=chunks)
+    # Step 2: Rerank — disabled (free Gemini quota insufficient for per-chunk scoring)
+    # Set RERANKER_ENABLED = True at module level to re-enable
+    if RERANKER_ENABLED:
+        chunks = await rerank(query=query, chunks=chunks)
 
     # Step 3: Synthesize — Gemini Flash Lite generates a grounded answer
-    #answer = await synthesize(query=query, chunks=reranked)
     answer = await synthesize(query=query, chunks=chunks)
 
     return answer

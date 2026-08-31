@@ -1,34 +1,43 @@
-# services/session_store.py — In-memory conversation session store
-#
-# Stores the message history for each active session as a list of {role, text} dicts.
-# This history is passed to Gemini on every request so the LLM has full conversation context.
-#
-# ⚠️ IMPORTANT LIMITATION — Production Concern:
-# This store lives in Python process memory. This means:
-#   1. All sessions are LOST if the server restarts.
-#   2. If multiple server instances run (horizontal scaling), each has its own isolated store.
-#      A user mid-conversation routed to a different instance will lose their history.
-# Production fix: Replace this with a shared Redis store with TTL-based session expiry.
+"""
+session_store.py — In-memory HTTP chat session history store.
 
-from collections import defaultdict
-from typing import List, Dict
+Stores the last N messages per session_id for the /chat HTTP endpoint.
+Uses TTLCache to cap memory usage: max 1000 concurrent sessions,
+each session expires after 2 hours of inactivity.
 
-# Structure: { session_id (str) -> [ {"role": "user"|"model", "text": str}, ... ] }
-# defaultdict(list) means accessing a non-existent key auto-creates an empty list — no KeyError
-_store: Dict[str, List[Dict[str, str]]] = defaultdict(list)
+Note: This is separate from Gemini Live audio sessions (WebSocket).
+"""
 
+import logging
+from typing import Any
 
-def get_history(session_id: str) -> List[Dict[str, str]]:
-    """Returns the full message history for a session. Returns [] for new sessions."""
-    return _store[session_id]
+from cachetools import TTLCache
+
+logger = logging.getLogger(__name__)
+
+# Max 1000 concurrent sessions; each expires after 2 hours of inactivity.
+# TTLCache raises KeyError on missing keys (unlike defaultdict) — handle explicitly.
+_store: TTLCache = TTLCache(maxsize=1000, ttl=7200)
 
 
-def append_message(session_id: str, role: str, text: str) -> None:
-    """Appends a single message turn to the session history.
-    role must be 'user' or 'model' — these are Gemini's expected role labels."""
-    _store[session_id].append({"role": role, "text": text})
+def get_history(session_id: str) -> list[dict[str, Any]]:
+    """Return message history for the given session. Returns [] if not found or expired."""
+    try:
+        return _store[session_id]
+    except KeyError:
+        return []
+
+
+def append_message(session_id: str, message: dict[str, Any]) -> None:
+    """Append a message to the session history. Creates the session if it doesn't exist."""
+    if session_id not in _store:
+        _store[session_id] = []
+    _store[session_id].append(message)
 
 
 def clear_session(session_id: str) -> None:
-    """Deletes a session and its entire history. Useful for logout or reset flows."""
-    _store.pop(session_id, None)  # pop with default=None avoids KeyError if session doesn't exist
+    """Delete a session from the store."""
+    try:
+        del _store[session_id]
+    except KeyError:
+        logger.debug("clear_session called on unknown session_id: %s", session_id)

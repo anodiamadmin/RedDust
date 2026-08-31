@@ -8,31 +8,99 @@ import {
   RTCSessionDescription,
 } from "react-native-webrtc";
 
+/*
+ * react-native-webrtc@124.x has a TypeScript typing issue where
+ * RTCPeerConnection's event methods are not exposed correctly.
+ *
+ * The methods exist at runtime, so we define only the event API
+ * that RedDust currently needs.
+ */
+type WebRTCTrackEvent = {
+  streams: MediaStream[];
+
+  track?: {
+    kind?: string;
+    id?: string;
+  };
+};
+
+type WebRTCPeerConnectionEvent =
+  | "iceconnectionstatechange"
+  | "connectionstatechange"
+  | "icegatheringstatechange";
+
+type WebRTCPeerConnectionEventTarget = {
+  addEventListener: (
+    type: WebRTCPeerConnectionEvent,
+    listener: () => void,
+  ) => void;
+
+  removeEventListener: (
+    type: WebRTCPeerConnectionEvent,
+    listener: () => void,
+  ) => void;
+};
+
+/*
+ * Current RedDust Gateway address.
+ *
+ * If the laptop's Wi-Fi IPv4 address changes,
+ * update this value.
+ */
+const GATEWAY_URL = "http://192.168.1.8:8000/offer";
+
 export default function HomeScreen() {
   const [status, setStatus] = useState("Microphone not started");
+
   const [stream, setStream] = useState<MediaStream | null>(null);
 
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
 
+  /*
+   * Request microphone permission.
+   *
+   * Android:
+   * Explicitly requests RECORD_AUDIO.
+   *
+   * iOS:
+   * getUserMedia() triggers the native iOS
+   * microphone permission dialog.
+   *
+   * NSMicrophoneUsageDescription must already
+   * exist in app.json / Info.plist.
+   */
   const requestMicrophonePermission = async () => {
-    if (Platform.OS !== "android") {
+    if (Platform.OS === "android") {
+      const result = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+        {
+          title: "Microphone Permission",
+
+          message:
+            "RedDust needs microphone access for real-time voice conversations.",
+
+          buttonPositive: "Allow",
+
+          buttonNegative: "Cancel",
+        },
+      );
+
+      return result === PermissionsAndroid.RESULTS.GRANTED;
+    }
+
+    if (Platform.OS === "ios") {
       return true;
     }
 
-    const result = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-      {
-        title: "Microphone Permission",
-        message:
-          "RedDust needs microphone access for real-time voice conversations.",
-        buttonPositive: "Allow",
-        buttonNegative: "Cancel",
-      },
-    );
-
-    return result === PermissionsAndroid.RESULTS.GRANTED;
+    return false;
   };
 
+  /*
+   * Step 11 + Step 16
+   *
+   * Create the RTCPeerConnection and install
+   * WebRTC state monitoring.
+   */
   const createPeerConnection = () => {
     const pc = new RTCPeerConnection({
       iceServers: [
@@ -42,60 +110,150 @@ export default function HomeScreen() {
       ],
     });
 
+    /*
+     * TypeScript adapter for the event methods that
+     * react-native-webrtc provides at runtime.
+     */
+    const eventPc = pc as unknown as WebRTCPeerConnectionEventTarget;
+
     peerConnectionRef.current = pc;
 
     console.log("RTCPeerConnection created");
+
+    /*
+     * Step 16 — initial states.
+     *
+     * Event handlers only fire when the state changes,
+     * so log the starting values explicitly.
+     */
+    console.log("Initial ICE connection state:", pc.iceConnectionState);
+
+    console.log("Initial PeerConnection state:", pc.connectionState);
+
+    /*
+     * Step 16 — monitor ICE connectivity.
+     *
+     * This tells us whether the Samsung and
+     * FastAPI/aiortc gateway can find a working
+     * network path.
+     */
+    eventPc.addEventListener("iceconnectionstatechange", () => {
+      console.log("ICE:", pc.iceConnectionState);
+
+      if (pc.iceConnectionState === "checking") {
+        setStatus("WebRTC ICE connection checking...");
+      }
+
+      if (
+        pc.iceConnectionState === "connected" ||
+        pc.iceConnectionState === "completed"
+      ) {
+        setStatus(`ICE connected: ${pc.iceConnectionState}`);
+      }
+
+      if (pc.iceConnectionState === "failed") {
+        setStatus("WebRTC ICE connection failed");
+      }
+
+      if (pc.iceConnectionState === "disconnected") {
+        setStatus("WebRTC ICE connection disconnected");
+      }
+
+      if (pc.iceConnectionState === "closed") {
+        console.log("ICE connection closed");
+      }
+    });
+
+    /*
+     * Step 16 — monitor the overall
+     * RTCPeerConnection state.
+     *
+     * Main success target:
+     *
+     * new
+     *   ↓
+     * connecting
+     *   ↓
+     * connected
+     */
+    eventPc.addEventListener("connectionstatechange", () => {
+      console.log("Connection:", pc.connectionState);
+
+      if (pc.connectionState === "connecting") {
+        setStatus("WebRTC connection establishing...");
+      }
+
+      if (pc.connectionState === "connected") {
+        setStatus("WebRTC connection connected");
+      }
+
+      if (pc.connectionState === "failed") {
+        setStatus("WebRTC connection failed");
+      }
+
+      if (pc.connectionState === "disconnected") {
+        setStatus("WebRTC connection disconnected");
+      }
+
+      if (pc.connectionState === "closed") {
+        console.log("PeerConnection closed");
+      }
+    });
 
     return pc;
   };
 
   /*
-   * For this first RedDust proof of concept we are NOT using
-   * trickle ICE signalling.
+   * We are currently NOT using trickle ICE.
    *
-   * Therefore, after setLocalDescription(), we wait until
-   * WebRTC has finished gathering ICE candidates before
+   * Therefore, after setLocalDescription(),
+   * wait until ICE gathering is complete before
    * sending the SDP offer to FastAPI.
    */
   const waitForIceGatheringComplete = async (pc: RTCPeerConnection) => {
     if (pc.iceGatheringState === "complete") {
       console.log("ICE gathering already complete");
+
       return;
     }
+
+    const eventPc = pc as unknown as WebRTCPeerConnectionEventTarget;
 
     await new Promise<void>((resolve) => {
       const checkState = () => {
         console.log("ICE gathering state:", pc.iceGatheringState);
 
         if (pc.iceGatheringState === "complete") {
-          pc.removeEventListener("icegatheringstatechange", checkState);
+          eventPc.removeEventListener("icegatheringstatechange", checkState);
 
           resolve();
         }
       };
 
-      pc.addEventListener("icegatheringstatechange", checkState);
+      eventPc.addEventListener("icegatheringstatechange", checkState);
     });
   };
 
   const startMicrophone = async () => {
     try {
       /*
-       * Prevent accidentally creating multiple microphone
-       * streams / PeerConnections.
+       * Prevent multiple microphone streams /
+       * PeerConnections from repeated taps.
        */
       if (stream) {
         setStatus("Microphone is already running");
+
         return;
       }
 
       /*
-       * Request Android runtime microphone permission.
+       * Request microphone permission.
        */
       const hasPermission = await requestMicrophonePermission();
 
       if (!hasPermission) {
         setStatus("Microphone permission denied");
+
         return;
       }
 
@@ -111,18 +269,25 @@ export default function HomeScreen() {
 
       setStream(localStream);
 
+      /*
+       * Verify that the microphone produced
+       * an audio track.
+       */
       const audioTracks = localStream.getAudioTracks();
 
       console.log("Audio tracks:", audioTracks);
 
       /*
        * Create the WebRTC PeerConnection.
+       *
+       * Step 16 state listeners are installed
+       * inside createPeerConnection().
        */
       const pc = createPeerConnection();
 
       /*
-       * Step 12 — attach microphone track(s)
-       * to the PeerConnection.
+       * Step 12 — attach the microphone
+       * track to the PeerConnection.
        */
       localStream.getTracks().forEach((track) => {
         pc.addTrack(track, localStream);
@@ -131,28 +296,29 @@ export default function HomeScreen() {
       console.log("Microphone track added to RTCPeerConnection");
 
       /*
-       * Step 13 — create the WebRTC SDP offer.
+       * Step 13 — create the WebRTC offer.
        */
       const offer = await pc.createOffer();
 
       console.log("WebRTC offer created");
+
       console.log("Offer type:", offer.type);
+
       console.log("Initial Offer SDP:", offer.sdp);
 
       /*
        * Adopt the offer locally.
        *
-       * This also starts ICE candidate gathering.
+       * This also begins ICE candidate gathering.
        */
       await pc.setLocalDescription(offer);
 
       console.log("Local description set");
 
       /*
-       * IMPORTANT:
-       *
-       * Because we are currently using one HTTP POST instead
-       * of trickle ICE, wait until ICE gathering finishes.
+       * Because we are using one-shot HTTP
+       * signaling instead of trickle ICE,
+       * wait for all ICE candidates.
        */
       setStatus("Gathering ICE candidates...");
 
@@ -161,10 +327,9 @@ export default function HomeScreen() {
       console.log("ICE gathering complete");
 
       /*
-       * The final localDescription should now contain the
-       * gathered ICE candidates.
-       *
-       * Send THIS SDP rather than the original offer.sdp.
+       * pc.localDescription now contains
+       * the completed offer including ICE
+       * candidates.
        */
       const localDescription = pc.localDescription;
 
@@ -177,14 +342,12 @@ export default function HomeScreen() {
       console.log("Final local SDP:", localDescription.sdp);
 
       /*
-       * Step 14 — send the WebRTC offer to FastAPI.
-       *
-       * 192.168.1.8 is the current Wi-Fi IPv4 address
-       * of the Windows laptop running reddust-gateway.
+       * Step 14 — send the completed offer
+       * to FastAPI / aiortc.
        */
       setStatus("Sending WebRTC offer to gateway...");
 
-      const response = await fetch("http://192.168.1.8:8000/offer", {
+      const response = await fetch(GATEWAY_URL, {
         method: "POST",
 
         headers: {
@@ -198,8 +361,7 @@ export default function HomeScreen() {
       });
 
       /*
-       * Make HTTP errors visible rather than trying
-       * to process an invalid response as an SDP answer.
+       * Stop if FastAPI returns an HTTP error.
        */
       if (!response.ok) {
         throw new Error(`Gateway returned HTTP ${response.status}`);
@@ -216,12 +378,14 @@ export default function HomeScreen() {
       const answer = await response.json();
 
       console.log("Gateway answer received");
+
       console.log("Answer type:", answer.type);
+
       console.log("Answer SDP:", answer.sdp);
 
       /*
-       * Step 15 — apply the gateway's SDP answer
-       * to the Samsung's PeerConnection.
+       * Step 15 — apply the gateway's
+       * answer to the Samsung PeerConnection.
        */
       setStatus("Applying gateway WebRTC answer...");
 
@@ -230,10 +394,20 @@ export default function HomeScreen() {
       console.log("Remote description set");
 
       /*
-       * Step 15 has now completed successfully.
+       * Step 15 is complete.
+       *
+       * Step 16 listeners now continue watching
+       * for:
+       *
+       * ICE: connected/completed
+       * Connection: connected
+       *
+       * Do not overwrite the status here,
+       * because one of those state events may
+       * already have updated it.
        */
-      setStatus(
-        `WebRTC signaling complete. Answer applied. Audio tracks: ${audioTracks.length}`,
+      console.log(
+        `WebRTC signaling complete. Audio tracks: ${audioTracks.length}`,
       );
     } catch (error) {
       console.error("Microphone/WebRTC error:", error);
@@ -244,7 +418,7 @@ export default function HomeScreen() {
 
   const stopMicrophone = () => {
     /*
-     * Stop all microphone tracks.
+     * Stop the local microphone tracks.
      */
     if (stream) {
       stream.getTracks().forEach((track) => {
@@ -255,10 +429,11 @@ export default function HomeScreen() {
     }
 
     /*
-     * Close the WebRTC PeerConnection.
+     * Close the current WebRTC PeerConnection.
      */
     if (peerConnectionRef.current) {
       peerConnectionRef.current.close();
+
       peerConnectionRef.current = null;
     }
 
