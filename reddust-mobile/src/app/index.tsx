@@ -24,30 +24,25 @@ type WebRTCTrackEvent = {
   };
 };
 
-type WebRTCPeerConnectionEvent =
-  | "iceconnectionstatechange"
-  | "connectionstatechange"
-  | "icegatheringstatechange";
-
-type WebRTCPeerConnectionEventTarget = {
-  addEventListener: (
-    type: WebRTCPeerConnectionEvent,
+interface WebRTCPeerConnectionEventTarget {
+  addEventListener(
+    type:
+      | "iceconnectionstatechange"
+      | "connectionstatechange"
+      | "icegatheringstatechange",
     listener: () => void,
-  ) => void;
+  ): void;
 
-  removeEventListener: (
-    type: WebRTCPeerConnectionEvent,
+  addEventListener(
+    type: "track",
+    listener: (event: WebRTCTrackEvent) => void,
+  ): void;
+
+  removeEventListener(
+    type: "icegatheringstatechange",
     listener: () => void,
-  ) => void;
-};
-
-/*
- * Current RedDust Gateway address.
- *
- * If the laptop's Wi-Fi IPv4 address changes,
- * update this value.
- */
-const GATEWAY_URL = "http://192.168.1.8:8000/offer";
+  ): void;
+}
 
 export default function HomeScreen() {
   const [status, setStatus] = useState("Microphone not started");
@@ -133,7 +128,7 @@ export default function HomeScreen() {
     /*
      * Step 16 — monitor ICE connectivity.
      *
-     * This tells us whether the Samsung and
+     * This tells us whether the phone and
      * FastAPI/aiortc gateway can find a working
      * network path.
      */
@@ -342,12 +337,38 @@ export default function HomeScreen() {
       console.log("Final local SDP:", localDescription.sdp);
 
       /*
+       * Step 16C — obtain the RedDust Gateway URL
+       * from the developer's local Expo environment.
+       *
+       * Each developer has their own:
+       *
+       * .env.local
+       *
+       * Example:
+       *
+       * EXPO_PUBLIC_GATEWAY_URL=http://192.168.1.8:8000
+       *
+       * .env.local is NOT committed to Git.
+       */
+      const gatewayUrl = process.env.EXPO_PUBLIC_GATEWAY_URL;
+
+      /*
+       * Stop immediately if the developer
+       * has not configured their local gateway URL.
+       */
+      if (!gatewayUrl) {
+        throw new Error("EXPO_PUBLIC_GATEWAY_URL is not configured");
+      }
+
+      console.log("Gateway URL:", gatewayUrl);
+
+      /*
        * Step 14 — send the completed offer
        * to FastAPI / aiortc.
        */
       setStatus("Sending WebRTC offer to gateway...");
 
-      const response = await fetch(GATEWAY_URL, {
+      const response = await fetch(`${gatewayUrl}/offer`, {
         method: "POST",
 
         headers: {
@@ -385,7 +406,7 @@ export default function HomeScreen() {
 
       /*
        * Step 15 — apply the gateway's
-       * answer to the Samsung PeerConnection.
+       * answer to the phone PeerConnection.
        */
       setStatus("Applying gateway WebRTC answer...");
 

@@ -1,0 +1,49 @@
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Python cache / compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python build / packaging files
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Test / coverage output
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type checking / linting caches
+.mypy_cache/
+.ruff_cache/
+
+# Environment files / secrets
+.env
+.env.*
+!.env.example
+
+# VS Code local settings
+.vscode/
+
+# PyCharm / JetBrains
+.idea/
+
+# Windows files
+Thumbs.db
+Desktop.ini
+
+# macOS files
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp

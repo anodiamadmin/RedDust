@@ -41,3 +41,6 @@ example
 # generated native folders
 /ios
 /android
+
+# EXPO_PUBLIC_GATEWAY_URL=EXPO_PUBLIC_GATEWAY_URL=http://YOUR_LAPTOP_IP:8000
+.env.local
