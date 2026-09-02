@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { Button, PermissionsAndroid, Platform, Text, View } from "react-native";
 
+import InCallManager from "react-native-incall-manager";
+
 import {
   mediaDevices,
   MediaStream,
@@ -50,6 +52,28 @@ export default function HomeScreen() {
   const [stream, setStream] = useState<MediaStream | null>(null);
 
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
+
+  const remoteStreamRef = useRef<MediaStream | null>(null);
+
+  const [speakerOn, setSpeakerOn] = useState(true);
+
+  /*
+   * Step 19A — toggle the WebRTC call audio
+   * between the loudspeaker and the earpiece.
+   */
+  const toggleSpeakerRoute = () => {
+    const nextSpeakerOn = !speakerOn;
+
+    InCallManager.setForceSpeakerphoneOn(nextSpeakerOn);
+
+    setSpeakerOn(nextSpeakerOn);
+
+    console.log("Audio output:", nextSpeakerOn ? "LOUDSPEAKER" : "EARPIECE");
+
+    setStatus(
+      nextSpeakerOn ? "Audio output: Loudspeaker" : "Audio output: Earpiece",
+    );
+  };
 
   /*
    * Request microphone permission.
@@ -193,6 +217,36 @@ export default function HomeScreen() {
       if (pc.connectionState === "closed") {
         console.log("PeerConnection closed");
       }
+    });
+
+    /*
+     * Step 17 — receive the remote
+     * audio track from the gateway.
+     */
+    eventPc.addEventListener("track", (event) => {
+      console.log("Remote WebRTC track received");
+
+      console.log("Remote track kind:", event.track?.kind);
+
+      console.log("Remote streams:", event.streams);
+
+      const remoteStream = event.streams[0];
+
+      if (!remoteStream) {
+        console.log("Remote track arrived but no MediaStream was provided");
+
+        return;
+      }
+
+      remoteStreamRef.current = remoteStream;
+
+      const remoteAudioTracks = remoteStream.getAudioTracks();
+
+      console.log("Remote audio tracks:", remoteAudioTracks);
+
+      console.log("Remote audio track count:", remoteAudioTracks.length);
+
+      setStatus(`Remote audio received. Tracks: ${remoteAudioTracks.length}`);
     });
 
     return pc;
@@ -457,6 +511,8 @@ export default function HomeScreen() {
 
       peerConnectionRef.current = null;
     }
+
+    remoteStreamRef.current = null;
 
     setStatus("Microphone and PeerConnection stopped");
   };
