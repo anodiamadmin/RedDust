@@ -7,13 +7,16 @@
     "icon": "./assets/images/icon.png",
     "scheme": "reddustmobile",
     "userInterfaceStyle": "automatic",
+
     "ios": {
       "icon": "./assets/expo.icon",
       "bitcode": false,
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "RedDust uses your microphone for real-time voice conversations."
+        "NSMicrophoneUsageDescription": "RedDust uses your microphone for real-time voice conversations.",
+        "NSLocalNetworkUsageDescription": "RedDust connects to the local RedDust development gateway during development."
       }
     },
+
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -34,10 +37,12 @@
       ],
       "package": "com.anodiam.reddustmobile"
     },
+
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+
     "plugins": [
       "expo-router",
       [
@@ -53,10 +58,12 @@
       "@config-plugins/react-native-webrtc",
       "expo-image"
     ],
+
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
     },
+
     "extra": {
       "router": {},
       "eas": {
