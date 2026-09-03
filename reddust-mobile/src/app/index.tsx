@@ -306,6 +306,21 @@ export default function HomeScreen() {
         return;
       }
 
+      /*
+       * Step 19A — initialise call audio routing.
+       *
+       * RedDust defaults to the loudspeaker.
+       */
+      InCallManager.start({
+        media: "audio",
+      });
+
+      InCallManager.setForceSpeakerphoneOn(true);
+
+      setSpeakerOn(true);
+
+      console.log("Audio routing started: LOUDSPEAKER");
+
       setStatus("Starting microphone...");
 
       /*
@@ -514,6 +529,14 @@ export default function HomeScreen() {
 
     remoteStreamRef.current = null;
 
+    /*
+     * Step 19A — restore the phone's normal
+     * audio-routing state.
+     */
+    InCallManager.stop();
+
+    setSpeakerOn(true);
+
     setStatus("Microphone and PeerConnection stopped");
   };
 
@@ -549,6 +572,23 @@ export default function HomeScreen() {
         onPress={stopMicrophone}
         disabled={stream === null}
       />
+
+      <View
+        style={{
+          position: "absolute",
+          left: 24,
+          right: 24,
+          bottom: 32,
+        }}
+      >
+        <Button
+          title={
+            speakerOn ? "Audio Output: Loudspeaker" : "Audio Output: Earpiece"
+          }
+          onPress={toggleSpeakerRoute}
+          disabled={stream === null}
+        />
+      </View>
     </View>
   );
 }
