@@ -52,4 +52,4 @@ logs/
 *.tmp
 
 # Dedicated folder for AI prompt files
-.ai-prompts/
+.ai_prompts/
