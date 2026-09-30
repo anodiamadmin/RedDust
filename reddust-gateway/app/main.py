@@ -15,7 +15,7 @@ class Offer(BaseModel):
 
 @app.get("/")
 async def root():
-    return {"status": "RedDust Gateway running"}
+    return {"status": "RedDust Gateway running NOW"}
 
 
 @app.post("/offer")
@@ -59,6 +59,6 @@ async def offer(offer: Offer):
 @app.get("/healthz")
 async def healthz():
     return {
-        "status": "ok",
-        "service": "reddust-gateway"
+        "status": "all-ok",
+        "service": "reddust-gateway-here"
     }
