@@ -46,14 +46,6 @@ interface WebRTCPeerConnectionEventTarget {
   ): void;
 }
 
-/*
- * Current RedDust Gateway address.
- *
- * If the laptop's Wi-Fi IPv4 address changes,
- * update this value.
- */
-const GATEWAY_URL = `${process.env.EXPO_PUBLIC_GATEWAY_URL}/offer`;
-
 export default function HomeScreen() {
   const [status, setStatus] = useState("Microphone not started");
 
