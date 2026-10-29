@@ -1,9 +1,12 @@
-# .gitignore
-.env
+# RedDust local environment and cryptographic secrets
 .env.local
+.env
 .env.*
+/secrets/
+secrets/
+# Python local environment and cache
 !.env.example
 .venv/
 __pycache__/
 *.pyc
-secrets/
+.pytest_cache/
