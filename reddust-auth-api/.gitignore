@@ -1,11 +1,14 @@
-# RedDust local environment and cryptographic secrets
-.env.local
+# .gitignore — merge with the existing file
+# Local environment configuration
 .env
+.env.local
 .env.*
-/secrets/
-secrets/
-# Python local environment and cache
 !.env.example
+
+# Local signing-key material
+/secrets/
+
+# Python environment and caches
 .venv/
 __pycache__/
 *.pyc

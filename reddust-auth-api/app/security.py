@@ -1,7 +1,6 @@
 # app/security.py — illustrative implementation core
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
- 
 _GOOGLE_ISSUERS = {"accounts.google.com", "https://accounts.google.com"}
  
 def verify_google_id_token(raw_token: str, allowed_audiences: set[str]) -> dict:
