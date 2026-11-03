@@ -121,10 +121,33 @@ export default function HomeScreen() {
    * WebRTC state monitoring.
    */
   const createPeerConnection = () => {
+    const turnUsername = process.env.EXPO_PUBLIC_TURN_USERNAME;
+    const turnCredential = process.env.EXPO_PUBLIC_TURN_CREDENTIAL;
+
     const pc = new RTCPeerConnection({
       iceServers: [
         {
-          urls: "stun:stun.l.google.com:19302",
+          urls: process.env.EXPO_PUBLIC_TURN_SERVER_URL_1 as string,
+        },
+        {
+          urls: process.env.EXPO_PUBLIC_TURN_SERVER_URL_2 as string,
+          username: turnUsername,
+          credential: turnCredential,
+        },
+        {
+          urls: process.env.EXPO_PUBLIC_TURN_SERVER_URL_3 as string,
+          username: turnUsername,
+          credential: turnCredential,
+        },
+        {
+          urls: process.env.EXPO_PUBLIC_TURN_SERVER_URL_4 as string,
+          username: turnUsername,
+          credential: turnCredential,
+        },
+        {
+          urls: process.env.EXPO_PUBLIC_TURN_SERVER_URL_5 as string,
+          username: turnUsername,
+          credential: turnCredential,
         },
       ],
     });
