@@ -1,0 +1,32 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.7.0 -- D:\RedDust\reddust-auth-api\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: D:\RedDust\reddust-auth-api
+plugins: anyio-4.15.1
+collecting ... collected 22 items
+
+tests/test_api_schemas.py::test_health_schema_exact PASSED               [  4%]
+tests/test_api_schemas.py::test_google_request_valid PASSED              [  9%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes0] PASSED [ 13%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes1] PASSED [ 18%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes2] PASSED [ 22%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes3] PASSED [ 27%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes4] PASSED [ 31%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes5] PASSED [ 36%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes6] PASSED [ 40%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes7] PASSED [ 45%]
+tests/test_api_schemas.py::test_google_request_rejects_bad_fields[changes8] PASSED [ 50%]
+tests/test_api_schemas.py::test_google_request_rejects_missing_fields PASSED [ 54%]
+tests/test_api_schemas.py::test_login_response_contains_exact_safe_fields PASSED [ 59%]
+tests/test_api_schemas.py::test_login_response_requires_token_fields PASSED [ 63%]
+tests/test_api_schemas.py::test_refresh_contract_and_rejects_extra_fields PASSED [ 68%]
+tests/test_api_schemas.py::test_empty_logout_and_create_call_reject_untrusted_identifiers PASSED [ 72%]
+tests/test_api_schemas.py::test_me_response_requires_preferences_key_but_accepts_null PASSED [ 77%]
+tests/test_api_schemas.py::test_call_response_serializes_utc_timestamps_and_null_fields PASSED [ 81%]
+tests/test_api_schemas.py::test_naive_call_timestamp_rejected PASSED     [ 86%]
+tests/test_api_schemas.py::test_end_call_reason_defaults_and_validates PASSED [ 90%]
+tests/test_api_schemas.py::test_gateway_offer_contract_and_utf8_byte_bound PASSED [ 95%]
+tests/test_api_schemas.py::test_contract_schema_json_is_available PASSED [100%]
+
+============================= 22 passed in 1.81s ==============================
+Pytest exit code: 0

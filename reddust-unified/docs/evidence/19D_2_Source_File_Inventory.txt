@@ -1,0 +1,11 @@
+﻿D:\RedDust\reddust-unified\src\app\(app)\(tabs)\index.tsx
+D:\RedDust\reddust-unified\src\app\(app)\(tabs)\soul-space.tsx
+D:\RedDust\reddust-unified\src\app\(app)\(tabs)\_layout.tsx
+D:\RedDust\reddust-unified\src\app\(app)\_layout.tsx
+D:\RedDust\reddust-unified\src\app\signin.tsx
+D:\RedDust\reddust-unified\src\app\_layout.tsx
+D:\RedDust\reddust-unified\src\components\GoogleSignInButton.tsx
+D:\RedDust\reddust-unified\src\components\Header.tsx
+D:\RedDust\reddust-unified\src\components\MusicPlayer.tsx
+D:\RedDust\reddust-unified\src\store\useAppStore.ts
+D:\RedDust\reddust-unified\src\store\useAuthStore.ts
