@@ -9,7 +9,10 @@
     "userInterfaceStyle": "dark",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.app.reddust"
+      "bundleIdentifier": "com.app.reddust",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "RedDust uses the microphone for voice calls."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +20,8 @@
         "backgroundColor": "#131315"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.app.reddust"
+      "package": "com.app.reddust",
+      "permissions": ["RECORD_AUDIO", "MODIFY_AUDIO_SETTINGS"]
     },
     "web": {
       "output": "static",
@@ -25,6 +29,8 @@
     },
     "plugins": [
       "expo-router",
+      "@react-native-google-signin/google-signin",
+      "expo-font",
       [
         "expo-splash-screen",
         {
@@ -33,8 +39,6 @@
           "imageWidth": 200
         }
       ],
-      "@react-native-google-signin/google-signin",
-      "expo-font",
       "expo-image",
       "expo-web-browser"
     ],

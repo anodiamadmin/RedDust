@@ -7,5 +7,11 @@ D:\RedDust\reddust-unified\src\app\_layout.tsx
 D:\RedDust\reddust-unified\src\components\GoogleSignInButton.tsx
 D:\RedDust\reddust-unified\src\components\Header.tsx
 D:\RedDust\reddust-unified\src\components\MusicPlayer.tsx
+D:\RedDust\reddust-unified\src\config\env.ts
+D:\RedDust\reddust-unified\src\features\auth\authApi.ts
+D:\RedDust\reddust-unified\src\features\auth\authSession.ts
+D:\RedDust\reddust-unified\src\features\call\callApi.ts
+D:\RedDust\reddust-unified\src\features\call\CallScreen.tsx
+D:\RedDust\reddust-unified\src\features\call\useWebRTCCall.ts
 D:\RedDust\reddust-unified\src\store\useAppStore.ts
 D:\RedDust\reddust-unified\src\store\useAuthStore.ts
