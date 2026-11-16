@@ -5,8 +5,10 @@
   "dependencies": {
     "@config-plugins/react-native-webrtc": "15.0.2",
     "@expo/ui": "56.0.26",
+    "@react-native-google-signin/google-signin": "16.1.5",
     "expo": "~56.0.24",
     "expo-constants": "~56.0.25",
+    "expo-crypto": "~56.0.5",
     "expo-dev-client": "~56.0.28",
     "expo-device": "~56.0.4",
     "expo-font": "~56.0.7",
@@ -14,6 +16,7 @@
     "expo-image": "~56.0.13",
     "expo-linking": "~56.0.19",
     "expo-router": "~56.2.22",
+    "expo-secure-store": "~56.0.4",
     "expo-splash-screen": "~56.0.16",
     "expo-status-bar": "~56.0.4",
     "expo-symbols": "~56.0.7",
