@@ -11,7 +11,7 @@
       "icon": "./assets/expo.icon",
       "bitcode": false,
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "RedDust uses your microphone for real-time voice conversations.",
+        "NSMicrophoneUsageDescription": "RedDust uses the microphone for real-time voice conversations.",
         "NSLocalNetworkUsageDescription": "RedDust connects to the local RedDust development gateway during development."
       }
     },
