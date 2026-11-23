@@ -8,11 +8,13 @@
     "scheme": "reddustmobile",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "com.anodiam.reddust",
       "icon": "./assets/expo.icon",
       "bitcode": false,
       "infoPlist": {
-        "NSMicrophoneUsageDescription": "RedDust uses the microphone for real-time voice conversations.",
-        "NSLocalNetworkUsageDescription": "RedDust connects to the local RedDust development gateway during development."
+        "NSMicrophoneUsageDescription": "RedDust uses your microphone for real-time voice conversations.",
+        "NSLocalNetworkUsageDescription": "RedDust connects to the local RedDust development gateway during development.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {

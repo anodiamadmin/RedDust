@@ -30,19 +30,7 @@ async def root():
 async def offer(offer: Offer):
     pc = RTCPeerConnection(
         configuration=RTCConfiguration(
-            iceServers=[
-                RTCIceServer(urls=os.getenv("TURN_SERVER_URL_1")),
-                RTCIceServer(
-                    urls=[
-                        os.getenv("TURN_SERVER_URL_2"),
-                        os.getenv("TURN_SERVER_URL_3"),
-                        os.getenv("TURN_SERVER_URL_4"),
-                        os.getenv("TURN_SERVER_URL_5"),
-                    ],
-                    username=os.getenv("TURN_USERNAME"),
-                    credential=os.getenv("TURN_CREDENTIAL"),
-                ),
-            ]
+            iceServers=[]
         )
     )
     peer_connections.add(pc)
