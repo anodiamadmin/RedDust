@@ -10,6 +10,8 @@ import {
   RTCSessionDescription,
 } from "react-native-webrtc";
 
+import { GATEWAY_BASE } from "@/config/endpoints";
+
 /*
  * react-native-webrtc@124.x has a TypeScript typing issue where
  * RTCPeerConnection's event methods are not exposed correctly.
@@ -442,7 +444,9 @@ export default function HomeScreen() {
        *
        * .env.local is NOT committed to Git.
        */
-      const gatewayUrl = process.env.EXPO_PUBLIC_GATEWAY_URL;
+      // const gatewayUrl = process.env.EXPO_PUBLIC_GATEWAY_URL;
+      // In the existing call function, replace the URL assignment:
+      const gatewayUrl = GATEWAY_BASE;
 
       /*
        * Stop immediately if the developer
